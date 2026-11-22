@@ -125,6 +125,18 @@ main { max-width: 1320px; margin: 0 auto; padding: 0 16px 40px; }
 .selo-live i { font-size: 12px; animation: pulsar 1.2s infinite; }
 @keyframes pulsar { 50% { opacity: .35; } }
 
+/* espectadores da live: pílula embaixo do selo AO VIVO */
+.selo-live .vendo {
+  position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  padding: 3px 9px; border-radius: 999px; line-height: 1.2;
+  font: 700 12px/1.2 "Inter", system-ui, sans-serif; color: #fff;
+  background: rgba(20, 10, 40, .92); border: 1px solid rgba(190, 120, 255, .8);
+}
+.selo-live .vendo i { font-size: 11px; color: #ff5a6a; animation: none; }
+.contagem .assistindo { white-space: nowrap; }
+.contagem .assistindo i { color: #ff5a6a; }
+
 .capa {
   position: relative; overflow: hidden;
   aspect-ratio: 4 / 5; border-radius: 8px;

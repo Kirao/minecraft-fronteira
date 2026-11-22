@@ -22,6 +22,7 @@
     return null;
   };
   let aoVivo = [];
+  let vendo = {}; // { canal: espectadores }
   let chatDe = selecionados[0] || null;
   let chatAberto = params.get("chat") !== "0" && window.innerWidth > 700;
 
@@ -38,14 +39,15 @@
 
   function desenharLista() {
     const ordem = [...aoVivo].sort((a, b) => nome(a).localeCompare(nome(b), "pt-BR", { sensitivity: "base" }));
+    const total = ordem.reduce((s, u) => s + (vendo[u] || 0), 0);
     elDica.textContent = ordem.length
-      ? `${ordem.length} ao vivo agora. Clique para adicionar ou tirar da tela.`
+      ? `${ordem.length} ao vivo agora${total ? ` · ${total.toLocaleString("pt-BR")} ${total === 1 ? "pessoa vendo" : "pessoas vendo"} Fronteira` : ""}. Clique para adicionar ou tirar da tela.`
       : "Ninguém da série está ao vivo agora. Volte mais tarde!";
     elLista.innerHTML = ordem
       .map((u) => `
         <button class="chip ${selecionados.includes(u) ? "on" : ""}" data-u="${esc(u)}" title="${esc(porUser[u].nome)}">
           <img src="${esc(foto(u))}" alt="" />
-          <span class="ponto"></span>${esc(nome(u))}
+          <span class="ponto"></span>${esc(nome(u))}${typeof vendo[u] === "number" ? `<span class="vendo"><i class="fa-solid fa-eye"></i> ${vendo[u].toLocaleString("pt-BR")}</span>` : ""}
           <i class="fa-solid fa-check check"></i>
         </button>`)
       .join("");
@@ -136,6 +138,7 @@
     const users = Object.keys(porUser);
     if (jaTenho) {
       aoVivo = users.filter((u) => jaTenho[u]?.live);
+      vendo = Object.fromEntries(users.map((u) => [u, jaTenho[u]?.viewers]));
     } else {
       const pede = () => fetch("/api/twitch").then((r) => {
         if (!r.ok) throw new Error();
@@ -146,6 +149,7 @@
         const status = await pede().catch(() => new Promise((ok) => setTimeout(ok, 2000)).then(pede));
         guardaStatus(status);
         aoVivo = users.filter((u) => status[u]?.live);
+        vendo = Object.fromEntries(users.map((u) => [u, status[u]?.viewers]));
       } catch (e) {
         // sem resposta: mantém o que já estava na tela (ou o último guardado)
         const g = statusGuardado();

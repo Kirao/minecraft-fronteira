@@ -102,7 +102,26 @@ async function viaPublico(users) {
       }
     })
   );
+  await espectadores(out);
   return { out, desconhecidos };
+}
+
+// quantas pessoas assistem cada live (só para quem está ao vivo, poucos canais).
+// Vem do decapi (às vezes lento): limite de 8s; se falhar, usa o último número (10 min).
+const ultimosViewers = {}; // { canal: { n, quando } }
+async function espectadores(out) {
+  const vivos = Object.keys(out).filter((u) => out[u].live);
+  await Promise.all(
+    vivos.map(async (u) => {
+      const txt = await fetch(`https://decapi.me/twitch/viewercount/${encodeURIComponent(u)}`, { signal: AbortSignal.timeout(8000) })
+        .then((r) => (r.ok ? r.text() : ""))
+        .catch(() => "");
+      const n = /^\s*\d+\s*$/.test(txt) ? Number(txt) : null;
+      if (n !== null) ultimosViewers[u] = { n, quando: Date.now() };
+      const m = ultimosViewers[u];
+      if (m && Date.now() - m.quando < 10 * 60 * 1000) out[u].viewers = m.n;
+    })
+  );
 }
 
 export default async function handler(req, res) {
@@ -124,7 +143,7 @@ export default async function handler(req, res) {
   const pedeNovo = fresh === bloco || fresh === bloco - 1;
 
   if (!pedeNovo && ultimoResultado && Date.now() - ultimoResultado.quando < RESULTADO_VALE) {
-    res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=120");
+    res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=300");
     return res.status(200).json(ultimoResultado.dados);
   }
 
@@ -133,7 +152,7 @@ export default async function handler(req, res) {
     if (id && secret) {
       const data = await viaHelix(users, id, secret);
       ultimoResultado = { dados: data, quando: Date.now() };
-      res.setHeader("Cache-Control", pedeNovo ? "s-maxage=20" : "s-maxage=30, stale-while-revalidate=120");
+      res.setHeader("Cache-Control", pedeNovo ? "s-maxage=20" : "s-maxage=30, stale-while-revalidate=300");
       return res.status(200).json(data);
     }
     const { out, desconhecidos } = await viaPublico(users);
@@ -143,7 +162,7 @@ export default async function handler(req, res) {
     // e a Vercel atualiza por trás (o decapi é lento, ninguém fica esperando);
     // se faltou algum canal, guarda só 10s para tentar de novo logo
     if (pedeNovo) res.setHeader("Cache-Control", "s-maxage=20");
-    else res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10, stale-while-revalidate=60" : "s-maxage=30, stale-while-revalidate=120");
+    else res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10, stale-while-revalidate=60" : "s-maxage=30, stale-while-revalidate=300");
     return res.status(200).json(out);
   } catch (e) {
     return res.status(502).json({ error: "falha ao consultar a Twitch" });

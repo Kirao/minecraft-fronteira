@@ -51,8 +51,11 @@
       : `<img class="blur" src="${esc(avatar)}" alt="" aria-hidden="true" />
          <img class="foto avatar" src="${esc(avatar)}" alt="Foto de ${esc(p.nome)}" onerror="this.src='${AVATAR_PADRAO}'" />`;
 
+    const vendo = status[u]?.viewers;
     const selo = live
-      ? `<a class="selo-live" href="multistream.html?c=${u}" title="Assistir aqui no site"><img src="ui/aovivo_gema.webp" alt="Ao vivo" width="385" height="125" /></a>`
+      ? `<a class="selo-live" href="multistream.html?c=${u}" title="Assistir aqui no site"><img src="ui/aovivo_gema.webp" alt="Ao vivo" width="385" height="125" />${
+          typeof vendo === "number" ? `<span class="vendo"><i class="fa-solid fa-eye"></i> ${vendo.toLocaleString("pt-BR")}</span>` : ""
+        }</a>`
       : "";
 
     // "youtube2", "twitch2"... usam o mesmo ícone da rede
@@ -88,8 +91,12 @@
     if (html !== ultimoHtml) { grade.innerHTML = html; ultimoHtml = html; }
 
     const vivos = lista.filter(aoVivo).length;
+    // soma de quem está assistindo as lives da série (cada canal conta uma vez)
+    const assistindo = [...new Set(lista.filter(aoVivo).map(user))].reduce((s, u) => s + (status[u]?.viewers || 0), 0);
     contagem.innerHTML = carregou
-      ? `${lista.length} criadores · <b>${vivos} ao vivo agora</b>`
+      ? `${lista.length} criadores · <b>${vivos} ao vivo agora</b>${
+          assistindo ? ` · <span class="assistindo"><i class="fa-solid fa-eye"></i> <b>${assistindo.toLocaleString("pt-BR")}</b> ${assistindo === 1 ? "pessoa vendo" : "pessoas vendo"} Fronteira</span>` : ""
+        }`
       : `${lista.length} criadores · <i class="fa-solid fa-spinner fa-spin"></i> verificando quem está ao vivo...`;
   }
 
