@@ -5,6 +5,14 @@
   const busca = document.getElementById("busca");
   let status = {}; // { usuario: { avatar, live } }
   let carregou = false;
+  let soLive = false;
+  const btnLive = document.getElementById("so-live");
+  btnLive?.addEventListener("click", () => {
+    soLive = !soLive;
+    btnLive.classList.toggle("ativo", soLive);
+    btnLive.setAttribute("aria-pressed", soLive);
+    render();
+  });
 
   const ICONES = {
     twitch: "fa-brands fa-twitch",
@@ -62,11 +70,12 @@
     const termo = (busca?.value || "").trim().toLowerCase();
     const ordenada = [...lista]
       .filter((p) => !termo || [p.nome, p.personagem || "", user(p)].some((t) => t.toLowerCase().includes(termo)))
+      .filter((p) => !soLive || aoVivo(p))
       .sort((a, b) => (a.personagem || a.nome).localeCompare(b.personagem || b.nome, "pt-BR", { sensitivity: "base" }));
 
     grade.innerHTML = ordenada.length
       ? ordenada.map(card).join("")
-      : `<p class="vazio">${termo ? "Nenhum criador encontrado." : "Nenhum criador cadastrado ainda."}</p>`;
+      : `<p class="vazio">${soLive ? (carregou ? "Ninguém da série está ao vivo agora." : "Verificando quem está ao vivo...") : termo ? "Nenhum criador encontrado." : "Nenhum criador cadastrado ainda."}</p>`;
 
     const vivos = lista.filter(aoVivo).length;
     contagem.innerHTML = carregou

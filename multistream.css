@@ -178,3 +178,10 @@
 .barra-tela button:hover { transform: translateY(-1px); background: linear-gradient(180deg, #7a3fe0, #3d1a85); color: #fff; box-shadow: 0 0 12px rgba(240, 164, 58, .7); }
 .barra-tela button[data-acao="sair"] { padding: 0; width: 24px; justify-content: center; }
 .barra-tela button[data-acao="sair"]:hover { background: linear-gradient(180deg, #e0405a, #8c1022); }
+
+/* ícones centralizados nos botões */
+.barra-tela button, .chat-login a { justify-content: center; line-height: 1; }
+.barra-tela button i, .chat-login a i { display: block; line-height: 1; width: 1em; height: 1em; text-align: center; }
+.barra-tela button[data-acao="sair"] { width: 24px; height: 24px; padding: 0; gap: 0; }
+.barra-tela button[data-acao="sair"] i { font-size: 13px; }
+.chat-login a.sec { width: 26px; height: 24px; padding: 0; }
