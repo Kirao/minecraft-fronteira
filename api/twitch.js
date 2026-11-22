@@ -40,7 +40,7 @@ async function viaHelix(users, id, secret) {
 // e como offline se a resposta disser "offline". Qualquer outra coisa (erro, limite de
 // requisições) é "desconhecido": tentamos de novo e, se continuar, usamos o último valor conhecido.
 const EH_TEMPO = /\d+\s+(second|minute|hour|day)s?/i;
-const memoria = {}; // último status confirmado de cada canal (vale enquanto a função estiver "quente")
+const memoria = {}; // { canal: { live, quando } } último status confirmado (vale só por 3 minutos)
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function consultaUptime(u) {
@@ -65,9 +65,10 @@ async function viaDecapi(users) {
       const live = await consultaUptime(u);
       if (live === null) {
         desconhecidos++;
-        out[u] = { avatar: null, live: memoria[u] ?? false };
+        const m = memoria[u];
+        out[u] = { avatar: null, live: !!(m && Date.now() - m.quando < 3 * 60 * 1000 && m.live) };
       } else {
-        memoria[u] = live;
+        memoria[u] = { live, quando: Date.now() };
         out[u] = { avatar: null, live };
       }
     }
@@ -95,7 +96,8 @@ export default async function handler(req, res) {
     const { out, desconhecidos } = await viaDecapi(users);
     // resposta completa fica 60s no cache da Vercel (todo mundo vê a mesma);
     // se faltou algum canal, guarda só 10s para tentar de novo logo
-    res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10" : "s-maxage=60, stale-while-revalidate=240");
+    if (req.query.fresh) res.setHeader("Cache-Control", "no-store");
+    else res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10" : "s-maxage=45, stale-while-revalidate=30");
     return res.status(200).json(out);
   } catch (e) {
     return res.status(502).json({ error: "falha ao consultar a Twitch" });

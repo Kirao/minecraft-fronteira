@@ -268,3 +268,8 @@ input, .campo input, .pagina-multi input { caret-color: var(--ouro2); }
   box-shadow: 0 0 16px rgba(145, 70, 255, .75);
 }
 @media (max-width: 760px) { .busca { flex-wrap: wrap; } .filtro-live { height: 40px; font-size: 14px; } }
+.filtro-live.atualizar { width: 44px; padding: 0; }
+.filtro-live.atualizar i { color: var(--ouro2); font-size: 16px; display: block; line-height: 1; }
+.filtro-live.atualizar.girando i { animation: girar .8s linear infinite; }
+.filtro-live:disabled { cursor: wait; opacity: .8; }
+@keyframes girar { to { transform: rotate(360deg); } }

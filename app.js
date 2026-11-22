@@ -99,11 +99,11 @@
     return out;
   }
 
-  async function atualizar() {
+  async function atualizar(forcar = false) {
     const users = [...new Set(lista.map(user).filter(Boolean))];
     if (!users.length) return render();
     try {
-      const r = await fetch(`/api/twitch?users=${users.join(",")}`);
+      const r = await fetch(`/api/twitch?users=${users.join(",")}` + (forcar ? `&fresh=${Date.now()}` : ""), forcar ? { cache: "no-store" } : {});
       if (!r.ok) throw new Error();
       status = await r.json();
       carregou = true;
@@ -117,5 +117,16 @@
 
   render();
   atualizar();
-  setInterval(atualizar, 60000);
+  setInterval(() => atualizar(), 60000);
+
+  // botão "Atualizar": faz uma checagem nova agora, sem cache
+  const btnAtt = document.getElementById("atualizar");
+  btnAtt?.addEventListener("click", async () => {
+    if (btnAtt.disabled) return;
+    btnAtt.disabled = true;
+    btnAtt.classList.add("girando");
+    await atualizar(true);
+    btnAtt.classList.remove("girando");
+    setTimeout(() => (btnAtt.disabled = false), 5000); // evita cliques seguidos
+  });
 })();
