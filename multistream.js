@@ -137,15 +137,19 @@
     if (jaTenho) {
       aoVivo = users.filter((u) => jaTenho[u]?.live);
     } else {
-      try {
-        const r = await fetch("/api/twitch");
+      const pede = () => fetch("/api/twitch").then((r) => {
         if (!r.ok) throw new Error();
-        const status = await r.json();
+        return r.json();
+      });
+      try {
+        // se falhar, tenta de novo 1x depois de 2s
+        const status = await pede().catch(() => new Promise((ok) => setTimeout(ok, 2000)).then(pede));
         guardaStatus(status);
         aoVivo = users.filter((u) => status[u]?.live);
       } catch (e) {
+        // sem resposta: mantém o que já estava na tela (ou o último guardado)
         const g = statusGuardado();
-        aoVivo = g ? users.filter((u) => g[u]?.live) : [];
+        if (g) aoVivo = users.filter((u) => g[u]?.live);
       }
     }
     // na primeira vez, se não veio nada no link, já abre as 2 primeiras lives

@@ -3,7 +3,7 @@
 // Consulta SEMPRE a lista fixa de participantes.js (ignora nomes pedidos na URL),
 // assim robôs não conseguem gastar a cota pedindo listas inventadas.
 // Se TWITCH_CLIENT_ID e TWITCH_CLIENT_SECRET estiverem configurados na Vercel,
-// usa a API oficial da Twitch. Senão, usa o serviço público decapi.me.
+// usa a API oficial da Twitch. Senão, usa a prévia pública da live (e o decapi.me de reserva).
 
 import { readFileSync } from "node:fs";
 
@@ -15,7 +15,7 @@ try {
 
 // último resultado completo na memória da função: segura rajadas de pedidos
 let ultimoResultado = null; // { dados, quando }
-const RESULTADO_VALE = 30 * 1000;
+const RESULTADO_VALE = 20 * 1000;
 
 let cachedToken = null;
 
@@ -50,49 +50,58 @@ async function viaHelix(users, id, secret) {
   return out;
 }
 
-// Só conta como "ao vivo" se a resposta for um tempo de live (ex.: "1 hour, 3 minutes")
-// e como offline se a resposta disser "offline". Qualquer outra coisa (erro, limite de
-// requisições) é "desconhecido": tentamos de novo e, se continuar, usamos o último valor conhecido.
+// ---------- sem chaves da Twitch ----------
+// Fonte principal: a imagem de prévia da live no servidor de imagens da própria Twitch.
+// Canal ao vivo -> a imagem existe (200). Offline -> redireciona para "404_preview".
+// É rápido (~0,1s) e não tem limite de pedidos. O tamanho da imagem muda a cada minuto
+// para não pegar uma resposta velha guardada no cache da Twitch.
+// Reserva: o decapi.me (lento e às vezes falha). Se as duas falharem, usa o último
+// status confirmado (até 10 min).
 const EH_TEMPO = /\d+\s+(second|minute|hour|day)s?/i;
-const memoria = {}; // { canal: { live, quando } } último status confirmado (vale só por 3 minutos)
-const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+const memoria = {}; // { canal: { live, quando } }
 
-// o decapi às vezes demora 8s+ por canal: cada consulta tem limite de 5s e a rodada
-// inteira tem limite de ~12s (o que faltar usa o último valor conhecido)
-async function consultaUptime(u, prazo) {
-  for (let tentativa = 0; tentativa < 2 && Date.now() < prazo; tentativa++) {
-    const txt = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(u)}`, {
-      signal: AbortSignal.timeout(Math.max(1000, Math.min(5000, prazo - Date.now()))),
-    })
-      .then((r) => (r.ok ? r.text() : ""))
-      .catch(() => "");
-    if (/offline/i.test(txt)) return false;
-    if (EH_TEMPO.test(txt)) return true;
-    await esperar(300);
+async function viaPrevia(u) {
+  const largura = 1 + (Math.floor(Date.now() / 60000) % 60);
+  for (let tentativa = 0; tentativa < 2; tentativa++) {
+    try {
+      const r = await fetch(`https://static-cdn.jtvnw.net/previews-ttv/live_user_${u}-${largura}x1.jpg`, {
+        method: "HEAD",
+        redirect: "manual",
+        signal: AbortSignal.timeout(3000),
+      });
+      if (r.status === 200) return true;
+      if (r.status >= 300 && r.status < 400 && /404_preview/.test(r.headers.get("location") || "")) return false;
+    } catch (e) {}
   }
-  return null; // não deu pra saber
+  return null;
 }
 
-async function viaDecapi(users) {
+async function viaDecapiUm(u) {
+  const txt = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(u)}`, { signal: AbortSignal.timeout(6000) })
+    .then((r) => (r.ok ? r.text() : ""))
+    .catch(() => "");
+  if (/offline/i.test(txt)) return false;
+  if (EH_TEMPO.test(txt)) return true;
+  return null;
+}
+
+async function viaPublico(users) {
   const out = {};
   let desconhecidos = 0;
-  const fila = [...users];
-  const prazo = Date.now() + 12000;
-  async function trabalhador() {
-    while (fila.length) {
-      const u = fila.shift();
-      const live = Date.now() < prazo ? await consultaUptime(u, prazo) : null;
+  await Promise.all(
+    users.map(async (u) => {
+      let live = await viaPrevia(u);
+      if (live === null) live = await viaDecapiUm(u);
       if (live === null) {
         desconhecidos++;
         const m = memoria[u];
-        out[u] = { avatar: null, live: !!(m && Date.now() - m.quando < 3 * 60 * 1000 && m.live) };
+        out[u] = { avatar: null, live: !!(m && Date.now() - m.quando < 10 * 60 * 1000 && m.live) };
       } else {
         memoria[u] = { live, quando: Date.now() };
         out[u] = { avatar: null, live };
       }
-    }
-  }
-  await Promise.all(Array.from({ length: 6 }, trabalhador)); // 6 por vez
+    })
+  );
   return { out, desconhecidos };
 }
 
@@ -115,7 +124,7 @@ export default async function handler(req, res) {
   const pedeNovo = fresh === bloco || fresh === bloco - 1;
 
   if (!pedeNovo && ultimoResultado && Date.now() - ultimoResultado.quando < RESULTADO_VALE) {
-    res.setHeader("Cache-Control", "s-maxage=45, stale-while-revalidate=600");
+    res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=120");
     return res.status(200).json(ultimoResultado.dados);
   }
 
@@ -124,17 +133,17 @@ export default async function handler(req, res) {
     if (id && secret) {
       const data = await viaHelix(users, id, secret);
       ultimoResultado = { dados: data, quando: Date.now() };
-      res.setHeader("Cache-Control", pedeNovo ? "s-maxage=20" : "s-maxage=45, stale-while-revalidate=600");
+      res.setHeader("Cache-Control", pedeNovo ? "s-maxage=20" : "s-maxage=30, stale-while-revalidate=120");
       return res.status(200).json(data);
     }
-    const { out, desconhecidos } = await viaDecapi(users);
+    const { out, desconhecidos } = await viaPublico(users);
     if (!desconhecidos) ultimoResultado = { dados: out, quando: Date.now() };
     // resposta fica no cache da Vercel (todo mundo vê a mesma). stale-while-revalidate:
     // depois de um tempo parado, o próximo visitante recebe a última resposta na hora
     // e a Vercel atualiza por trás (o decapi é lento, ninguém fica esperando);
     // se faltou algum canal, guarda só 10s para tentar de novo logo
     if (pedeNovo) res.setHeader("Cache-Control", "s-maxage=20");
-    else res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10, stale-while-revalidate=600" : "s-maxage=45, stale-while-revalidate=600");
+    else res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10, stale-while-revalidate=60" : "s-maxage=30, stale-while-revalidate=120");
     return res.status(200).json(out);
   } catch (e) {
     return res.status(502).json({ error: "falha ao consultar a Twitch" });

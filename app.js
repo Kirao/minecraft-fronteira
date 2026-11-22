@@ -99,7 +99,10 @@
       while (fila.length) {
         const u = fila.shift();
         const uptime = await fetch(`https://decapi.me/twitch/uptime/${u}`).then((r) => (r.ok ? r.text() : "")).catch(() => "");
-        out[u] = { avatar: null, live: EH_TEMPO.test(uptime) && !/offline/i.test(uptime) };
+        // resposta estranha/erro: mantém o que já sabíamos em vez de marcar como offline
+        if (/offline/i.test(uptime)) out[u] = { avatar: null, live: false };
+        else if (EH_TEMPO.test(uptime)) out[u] = { avatar: null, live: true };
+        else out[u] = status[u] || { avatar: null, live: false };
       }
     }
     await Promise.all(Array.from({ length: 4 }, trabalhador));
@@ -109,10 +112,14 @@
   async function atualizar(forcar = false) {
     const users = [...new Set(lista.map(user).filter(Boolean))];
     if (!users.length) return render();
+    const pede = () =>
+      fetch("/api/twitch" + (forcar ? `?fresh=${Math.floor(Date.now() / 20000)}` : ""), forcar ? { cache: "no-store" } : {}).then((r) => {
+        if (!r.ok) throw new Error();
+        return r.json();
+      });
     try {
-      const r = await fetch("/api/twitch" + (forcar ? `?fresh=${Math.floor(Date.now() / 20000)}` : ""), forcar ? { cache: "no-store" } : {});
-      if (!r.ok) throw new Error();
-      status = await r.json();
+      // se falhar, tenta de novo 1x depois de 2s antes de ir para o plano B
+      status = await pede().catch(() => new Promise((ok) => setTimeout(ok, 2000)).then(pede));
       guardaStatus(status);
       carregou = true;
     } catch (e) {
