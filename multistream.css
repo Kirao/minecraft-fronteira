@@ -121,25 +121,37 @@
 
 .tela {
   border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible;
-  border-style: solid; border-width: 34px 14px 26px; border-color: transparent;
-  border-image: url("ui/ms_player.webp") 58 22 42 22 fill / 34px 14px 26px / 0 stretch;
+  border-style: solid; border-width: 32px 12px 17px; border-color: transparent;
+  border-image: url("ui/ms_player.webp") 59 22 32 22 / 32px 12px 17px / 0 stretch;
   aspect-ratio: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .55));
 }
-.tela iframe { position: static; display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 4px; background: #0c0820; }
-.cabeca-tela { position: absolute; top: -30px; left: 4px; right: 70px; height: 26px; display: flex; align-items: center; gap: 8px; z-index: 2; }
+.tela iframe { position: static; display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 0; background: #0c0820; }
+.cabeca-tela { position: absolute; top: -29px; left: 4px; right: 70px; height: 26px; display: flex; align-items: center; gap: 8px; z-index: 2; }
 .selo-ms { height: 24px; width: auto; }
 .nome-tela { font: 600 14px "Fredoka", sans-serif; color: var(--texto); text-shadow: 0 1px 4px rgba(0, 0, 0, .7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tela .barra-tela { top: -31px; right: 0; opacity: 1; }
+.tela .barra-tela { top: -29px; right: 0; opacity: 1; }
 .barra-tela button { width: 26px; height: 26px; font-size: 12px; }
 
 .chat {
   border: 0; border-radius: 0; background: transparent; overflow: visible;
-  border-style: solid; border-width: 30px 14px 28px; border-color: transparent;
-  border-image: url("ui/ms_chat.webp") 44 22 44 22 fill / 30px 14px 28px / 0 stretch;
+  border-style: solid; border-width: 26px 11px 20px; border-color: transparent;
+  border-image: url("ui/ms_chat.webp") 46 22 38 22 / 26px 11px 20px / 0 stretch;
+  background: #0e0a24; background-clip: padding-box;
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .55));
 }
-.chat-abas { background: transparent; border-bottom: 1px solid rgba(240, 164, 58, .35); }
+.chat-abas { background: #160f33; border-bottom: 1px solid rgba(240, 164, 58, .35); }
 .chat iframe { border-radius: 4px; }
-.vazio-palco { border-style: solid; border-width: 34px 14px 26px; border-color: transparent; border-radius: 0;
-  border-image: url("ui/ms_player.webp") 58 22 42 22 fill / 34px 14px 26px / 0 stretch; background: transparent; }
+.vazio-palco { border-style: solid; border-width: 32px 12px 17px; border-color: transparent; border-radius: 0;
+  border-image: url("ui/ms_player.webp") 59 22 32 22 / 32px 12px 17px / 0 stretch; background: rgba(14, 10, 36, .85); background-clip: padding-box; }
 @media (max-width: 700px) { .img-btn img { height: 38px; } }
+
+.chat-login {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 6px 8px; background: #160f33; border-bottom: 1px solid rgba(240, 164, 58, .35);
+  font: 500 12px "Inter", sans-serif; color: var(--texto2);
+}
+.chat-login a {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; text-decoration: none;
+  background: var(--roxo); color: #fff; font: 600 12px "Fredoka", sans-serif; white-space: nowrap;
+}
+.chat-login a.sec { background: transparent; border: 1px solid rgba(240, 164, 58, .5); color: var(--ouro2); }

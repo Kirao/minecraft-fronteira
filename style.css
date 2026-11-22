@@ -228,3 +228,20 @@ a.pilula:hover { transform: translateY(-2px); filter: drop-shadow(0 0 10px rgba(
 }
 .ir-multi a:hover { transform: translateY(-2px); }
 .ir-multi i { color: var(--ouro2); }
+
+/* selo DESAPARECIDO */
+.desaparecido { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); z-index: 4; line-height: 0; cursor: help; outline: none; }
+.desaparecido img { width: 150px; height: auto; display: block; filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .6)); }
+.card:has(.desaparecido) .capa img { filter: grayscale(.55) brightness(.85); }
+.balao-des {
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(4px);
+  width: 200px; padding: 8px 12px; border-radius: 12px; line-height: 1.3;
+  background: linear-gradient(180deg, #2a1760, #160f33); border: 1.5px solid var(--ouro);
+  color: var(--texto); font: 600 12px "Fredoka", sans-serif; text-align: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .5); opacity: 0; pointer-events: none; transition: .18s;
+}
+.balao-des::after {
+  content: ""; position: absolute; top: 100%; left: 50%; margin-left: -7px; margin-top: -6px;
+  width: 12px; height: 12px; background: #160f33; border-right: 1.5px solid var(--ouro); border-bottom: 1.5px solid var(--ouro); transform: rotate(45deg);
+}
+.desaparecido:hover .balao-des, .desaparecido:focus .balao-des { opacity: 1; transform: translateX(-50%); }

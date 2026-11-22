@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="style.css?v=19" />
-  <link rel="stylesheet" href="multistream.css?v=19" />
+  <link rel="stylesheet" href="style.css?v=20" />
+  <link rel="stylesheet" href="multistream.css?v=20" />
 </head>
 <body class="pagina-multi">
   <div class="fundo" aria-hidden="true"></div>
@@ -41,11 +41,18 @@
     <div class="telas" id="telas"></div>
     <aside class="chat" id="chat" hidden>
       <div class="chat-abas" id="chat-abas"></div>
+      <div class="chat-login">
+        <span>Pra conversar, entre na Twitch.</span>
+        <span>
+          <a href="https://www.twitch.tv/login" target="_blank" rel="noopener"><i class="fa-brands fa-twitch"></i> Entrar</a>
+          <a class="sec" id="chat-popout" href="#" target="_blank" rel="noopener" title="Abrir o chat numa janela da Twitch"><i class="fa-solid fa-up-right-from-square"></i></a>
+        </span>
+      </div>
       <iframe id="chat-frame" title="Chat da Twitch"></iframe>
     </aside>
   </main>
 
-  <script src="participantes.js?v=19"></script>
-  <script src="multistream.js?v=19"></script>
+  <script src="participantes.js?v=20"></script>
+  <script src="multistream.js?v=20"></script>
 </body>
 </html>

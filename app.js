@@ -50,6 +50,7 @@
     return `
       <article class="card ${live ? "live" : ""}">
         ${selo}
+        ${p.desaparecido && !live ? `<div class="desaparecido" tabindex="0"><img src="ui/desaparecido.webp" alt="Desaparecido" /><span class="balao-des">Sumiu do mapa! Faz um tempinho que não loga no servidor... se alguém achar, avisa a guilda 👀</span></div>` : ""}
         <div class="capa">${capa}</div>
         <h3 class="nome">${esc(p.personagem || p.nome)}</h3>
         ${p.personagem && p.personagem.toLowerCase() !== p.nome.toLowerCase() ? `<p class="criador">${esc(p.nome)}</p>` : ""}

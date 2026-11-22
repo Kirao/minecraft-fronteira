@@ -91,6 +91,7 @@
       .join("");
     const src = `https://www.twitch.tv/embed/${encodeURIComponent(chatDe)}/chat?parent=${PARENT}&darkpopout`;
     if (elChatFrame.getAttribute("src") !== src) elChatFrame.setAttribute("src", src);
+    document.getElementById("chat-popout").href = `https://www.twitch.tv/popout/${encodeURIComponent(chatDe)}/chat?popout=`;
   }
 
   function alternar(u) {

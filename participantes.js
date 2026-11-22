@@ -7,6 +7,7 @@
 //  foto:    (opcional) foto no lugar da da Twitch: coloque o arquivo em fotos/ ou use um link
 //  personagem: (opcional) nome do personagem na série; aparece em destaque no card
 //  capa:    (opcional) arte do personagem que preenche o topo do card (pasta personagens/)
+//  desaparecido: (opcional) true = mostra o selo DESAPARECIDO (não loga no server faz tempo)
 //  redes:   links das redes sociais. Apague as linhas que a pessoa não tem.
 //           Redes aceitas: twitch, youtube, kick, tiktok, instagram, x, discord
 //           Para dois canais da mesma rede, use um número: youtube, youtube2...
@@ -52,6 +53,7 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Anibut",
+    desaparecido: true,
     twitch: "anibut",
     foto: "fotos/anibut.jpg",
     redes: {
@@ -72,6 +74,7 @@ window.PARTICIPANTES = [
   },
   {
     nome: "CarlinDoPlay",
+    desaparecido: true,
     personagem: "CarlinDoPlay",
     capa: "personagens/carlindoplay.webp",
     twitch: "",
@@ -151,6 +154,7 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Farizaku",
+    desaparecido: true,
     twitch: "farizaku",
     foto: "fotos/farizaku.jpg",
     redes: {
@@ -209,6 +213,7 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Loonely21",
+    desaparecido: true,
     personagem: "Loonely",
     capa: "personagens/loonely21.webp",
     twitch: "loonely21",
