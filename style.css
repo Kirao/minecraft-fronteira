@@ -181,3 +181,16 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 16px 40px; }
   .divisor { display: none; }
   .card { border-width: 20px; border-image-width: 20px; }
 }
+
+/* crédito no rodapé */
+.credito {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 14px; padding: 5px 14px 5px 5px; border-radius: 999px;
+  background: linear-gradient(180deg, #1b1533, #120d26);
+  border: 1px solid rgba(240, 164, 58, 0.45);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  color: var(--texto); font: 500 14px "Inter", sans-serif;
+}
+.credito img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--ouro); }
+.credito b { font-family: "Fredoka", sans-serif; font-weight: 600; color: var(--ouro2); }
+.credito i { color: #8c96ff; font-size: 18px; }

@@ -36,20 +36,23 @@ async function viaHelix(users, id, secret) {
   return out;
 }
 
+// Só conta como "ao vivo" se a resposta for um tempo de live (ex.: "1 hour, 3 minutes").
+// Qualquer outra resposta (offline, erro, limite de requisições) conta como offline.
+const EH_TEMPO = /\d+\s+(second|minute|hour|day)s?/i;
+
 async function viaDecapi(users) {
   const out = {};
-  await Promise.all(
-    users.map(async (u) => {
-      const [avatar, uptime] = await Promise.all([
-        fetch(`https://decapi.me/twitch/avatar/${encodeURIComponent(u)}`).then((r) => r.text()).catch(() => ""),
-        fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(u)}`).then((r) => r.text()).catch(() => ""),
-      ]);
-      out[u] = {
-        avatar: avatar.startsWith("http") ? avatar.trim() : null,
-        live: !!uptime && !/offline|not found|error/i.test(uptime),
-      };
-    })
-  );
+  const fila = [...users];
+  async function trabalhador() {
+    while (fila.length) {
+      const u = fila.shift();
+      const uptime = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(u)}`)
+        .then((r) => (r.ok ? r.text() : ""))
+        .catch(() => "");
+      out[u] = { avatar: null, live: EH_TEMPO.test(uptime) && !/offline/i.test(uptime) };
+    }
+  }
+  await Promise.all(Array.from({ length: 4 }, trabalhador)); // 4 por vez para não estourar o limite
   return out;
 }
 

@@ -72,15 +72,16 @@
   // consulta direta (quando a função /api não existe, ex.: abrindo o arquivo no PC)
   async function direto(users) {
     const out = {};
-    await Promise.all(
-      users.map(async (u) => {
-        const [avatar, uptime] = await Promise.all([
-          fetch(`https://decapi.me/twitch/avatar/${u}`).then((r) => r.text()).catch(() => ""),
-          fetch(`https://decapi.me/twitch/uptime/${u}`).then((r) => r.text()).catch(() => ""),
-        ]);
-        out[u] = { avatar: avatar.startsWith("http") ? avatar.trim() : null, live: !!uptime && !/offline|not found|error/i.test(uptime) };
-      })
-    );
+    const fila = [...users];
+    const EH_TEMPO = /\d+\s+(second|minute|hour|day)s?/i;
+    async function trabalhador() {
+      while (fila.length) {
+        const u = fila.shift();
+        const uptime = await fetch(`https://decapi.me/twitch/uptime/${u}`).then((r) => (r.ok ? r.text() : "")).catch(() => "");
+        out[u] = { avatar: null, live: EH_TEMPO.test(uptime) && !/offline/i.test(uptime) };
+      }
+    }
+    await Promise.all(Array.from({ length: 4 }, trabalhador));
     return out;
   }
 
