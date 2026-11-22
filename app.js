@@ -90,7 +90,7 @@
     const users = [...new Set(lista.map(user).filter(Boolean))];
     if (!users.length) return render();
     try {
-      const r = await fetch(`/api/twitch?users=${users.join(",")}&t=${Math.floor(Date.now() / 60000)}`, { cache: "no-store" });
+      const r = await fetch(`/api/twitch?users=${users.join(",")}`);
       if (!r.ok) throw new Error();
       status = await r.json();
     } catch (e) {

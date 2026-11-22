@@ -125,7 +125,7 @@
   async function atualizar() {
     const users = Object.keys(porUser);
     try {
-      const r = await fetch(`/api/twitch?users=${users.join(",")}&t=${Math.floor(Date.now() / 60000)}`, { cache: "no-store" });
+      const r = await fetch(`/api/twitch?users=${users.join(",")}`);
       const status = await r.json();
       aoVivo = users.filter((u) => status[u]?.live);
     } catch (e) {

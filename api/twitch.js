@@ -36,24 +36,44 @@ async function viaHelix(users, id, secret) {
   return out;
 }
 
-// Só conta como "ao vivo" se a resposta for um tempo de live (ex.: "1 hour, 3 minutes").
-// Qualquer outra resposta (offline, erro, limite de requisições) conta como offline.
+// Só conta como "ao vivo" se a resposta for um tempo de live (ex.: "1 hour, 3 minutes")
+// e como offline se a resposta disser "offline". Qualquer outra coisa (erro, limite de
+// requisições) é "desconhecido": tentamos de novo e, se continuar, usamos o último valor conhecido.
 const EH_TEMPO = /\d+\s+(second|minute|hour|day)s?/i;
+const memoria = {}; // último status confirmado de cada canal (vale enquanto a função estiver "quente")
+const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function consultaUptime(u) {
+  for (let tentativa = 0; tentativa < 3; tentativa++) {
+    const txt = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(u)}`)
+      .then((r) => (r.ok ? r.text() : ""))
+      .catch(() => "");
+    if (/offline/i.test(txt)) return false;
+    if (EH_TEMPO.test(txt)) return true;
+    await esperar(400 + tentativa * 600);
+  }
+  return null; // não deu pra saber
+}
 
 async function viaDecapi(users) {
   const out = {};
+  let desconhecidos = 0;
   const fila = [...users];
   async function trabalhador() {
     while (fila.length) {
       const u = fila.shift();
-      const uptime = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(u)}`)
-        .then((r) => (r.ok ? r.text() : ""))
-        .catch(() => "");
-      out[u] = { avatar: null, live: EH_TEMPO.test(uptime) && !/offline/i.test(uptime) };
+      const live = await consultaUptime(u);
+      if (live === null) {
+        desconhecidos++;
+        out[u] = { avatar: null, live: memoria[u] ?? false };
+      } else {
+        memoria[u] = live;
+        out[u] = { avatar: null, live };
+      }
     }
   }
-  await Promise.all(Array.from({ length: 4 }, trabalhador)); // 4 por vez para não estourar o limite
-  return out;
+  await Promise.all(Array.from({ length: 3 }, trabalhador)); // 3 por vez para não estourar o limite
+  return { out, desconhecidos };
 }
 
 export default async function handler(req, res) {
@@ -67,9 +87,16 @@ export default async function handler(req, res) {
 
   try {
     const { TWITCH_CLIENT_ID: id, TWITCH_CLIENT_SECRET: secret } = process.env;
-    const data = id && secret ? await viaHelix(users, id, secret) : await viaDecapi(users);
-    res.setHeader("Cache-Control", "s-maxage=45");
-    return res.status(200).json(data);
+    if (id && secret) {
+      const data = await viaHelix(users, id, secret);
+      res.setHeader("Cache-Control", "s-maxage=45, stale-while-revalidate=120");
+      return res.status(200).json(data);
+    }
+    const { out, desconhecidos } = await viaDecapi(users);
+    // resposta completa fica 60s no cache da Vercel (todo mundo vê a mesma);
+    // se faltou algum canal, guarda só 10s para tentar de novo logo
+    res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10" : "s-maxage=60, stale-while-revalidate=240");
+    return res.status(200).json(out);
   } catch (e) {
     return res.status(502).json({ error: "falha ao consultar a Twitch" });
   }
