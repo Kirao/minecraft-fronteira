@@ -8,6 +8,7 @@
 //  capa:    (opcional) link de uma arte/imagem larga para preencher o topo do card
 //  redes:   links das redes sociais. Apague as linhas que a pessoa não tem.
 //           Redes aceitas: twitch, youtube, kick, tiktok, instagram, x, discord
+//           Para dois canais da mesma rede, use um número: youtube, youtube2...
 // =====================================================================
 
 window.PARTICIPANTES = [
@@ -33,19 +34,13 @@ window.PARTICIPANTES = [
     },
   },
   {
-    nome: "Participante 3",
-    twitch: "",
+    nome: "oiRosa",
+    twitch: "oirosa",
+    foto: "fotos/oirosa.jpg",
     redes: {
-      twitch: "https://twitch.tv/",
-      youtube: "https://youtube.com/@",
-    },
-  },
-  {
-    nome: "Participante 4",
-    twitch: "",
-    redes: {
-      youtube: "https://youtube.com/@",
-      tiktok: "https://tiktok.com/@",
+      twitch: "https://www.twitch.tv/oirosa",
+      youtube: "https://www.youtube.com/@oiRosaTv",
+      youtube2: "https://www.youtube.com/@RosaTv_Games",
     },
   },
 ];

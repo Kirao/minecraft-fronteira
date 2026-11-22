@@ -13,30 +13,40 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
   <div class="fundo" aria-hidden="true"></div>
 
   <header class="topo">
-    <h1 class="logo">
-      <img src="logo.webp" alt="Minecraft Fronteira" width="700" height="178" />
-    </h1>
+    <div class="banner">
+      <h1 class="logo"><img src="logo.webp" alt="Minecraft Fronteira" width="700" height="178" /></h1>
+    </div>
   </header>
 
   <main>
-    <div class="secao">
-      <span class="linha esq" aria-hidden="true"></span>
-      <h2>Criadores</h2>
-      <span class="linha dir" aria-hidden="true"></span>
-    </div>
+    <h2 class="titulo"><img src="ui/btn.webp" alt="Criadores" width="490" height="125" /></h2>
     <p class="contagem" id="contagem"></p>
+
+    <div class="busca">
+      <img class="divisor esq" src="ui/divisor.webp" alt="" aria-hidden="true" />
+      <label class="campo">
+        <span class="bolinha" aria-hidden="true"></span>
+        <input id="busca" type="search" placeholder="Buscar criador..." autocomplete="off" aria-label="Buscar criador" />
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      </label>
+      <img class="divisor dir" src="ui/divisor.webp" alt="" aria-hidden="true" />
+    </div>
+
     <section id="grade" class="grade" aria-live="polite"></section>
   </main>
 
-  <footer class="rodape">Status ao vivo da Twitch atualiza sozinho a cada minuto.</footer>
+  <footer class="rodape">
+    <img class="barra" src="ui/titulo.webp" alt="" aria-hidden="true" />
+    <p>Status ao vivo da Twitch atualiza sozinho a cada minuto.</p>
+  </footer>
 
-  <script src="participantes.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <script src="participantes.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

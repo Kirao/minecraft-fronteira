@@ -2,6 +2,7 @@
   const lista = window.PARTICIPANTES || [];
   const grade = document.getElementById("grade");
   const contagem = document.getElementById("contagem");
+  const busca = document.getElementById("busca");
   let status = {}; // { usuario: { avatar, live } }
 
   const ICONES = {
@@ -35,28 +36,34 @@
          <img class="foto avatar" src="${esc(avatar)}" alt="Foto de ${esc(p.nome)}" onerror="this.src='${AVATAR_PADRAO}'" />`;
 
     const selo = live
-      ? `<a class="selo-live" href="https://twitch.tv/${u}" target="_blank" rel="noopener"><span class="ponto"></span> Ao vivo</a>`
+      ? `<a class="selo-live" href="https://twitch.tv/${u}" target="_blank" rel="noopener"><i class="fa-solid fa-tower-broadcast"></i> Ao vivo</a>`
       : "";
 
+    // "youtube2", "twitch2"... usam o mesmo ícone da rede
     const redes = Object.entries(p.redes || {})
+      .map(([k, v]) => [k.replace(/\d+$/, ""), v])
       .filter(([k, v]) => ICONES[k] && v)
       .map(([k, v]) => `<a class="${k}" href="${esc(v)}" target="_blank" rel="noopener" title="${NOMES[k]}${k === "twitch" && live ? " (ao vivo)" : ""}" aria-label="${NOMES[k]} de ${esc(p.nome)}"><i class="${ICONES[k]}"></i></a>`)
       .join("");
 
     return `
       <article class="card ${live ? "live" : ""}">
-        <div class="moldura"><div class="capa">${selo}${capa}</div><i class="canto tl"></i><i class="canto tr"></i><i class="canto bl"></i><i class="canto br"></i></div>
+        ${selo}
+        <div class="capa">${capa}</div>
         <h3 class="nome">${esc(p.nome)}</h3>
         <div class="redes">${redes}</div>
       </article>`;
   }
 
   function render() {
-    const ordenada = [...lista].sort((a, b) => aoVivo(b) - aoVivo(a));
+    const termo = (busca?.value || "").trim().toLowerCase();
+    const ordenada = [...lista]
+      .filter((p) => !termo || p.nome.toLowerCase().includes(termo) || user(p).includes(termo))
+      .sort((a, b) => aoVivo(b) - aoVivo(a));
 
     grade.innerHTML = ordenada.length
       ? ordenada.map(card).join("")
-      : `<p class="vazio">Nenhum criador cadastrado ainda.</p>`;
+      : `<p class="vazio">${termo ? "Nenhum criador encontrado." : "Nenhum criador cadastrado ainda."}</p>`;
 
     const vivos = lista.filter(aoVivo).length;
     contagem.innerHTML = `${lista.length} criadores · <b>${vivos} ao vivo agora</b>`;
@@ -89,6 +96,8 @@
     }
     render();
   }
+
+  busca?.addEventListener("input", render);
 
   render();
   atualizar();
