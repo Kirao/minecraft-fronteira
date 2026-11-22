@@ -62,7 +62,7 @@ main { max-width: 1320px; margin: 0 auto; padding: 0 16px 40px; }
 .titulo { margin: 22px 0 0; text-align: center; line-height: 0; }
 .titulo img { width: min(320px, 78vw); height: auto; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5)); }
 .contagem { text-align: center; margin: 10px 0 0; font-size: 14px; color: var(--texto2); min-height: 20px; }
-.contagem b { color: #ff6b7d; }
+.contagem b { color: var(--roxo-brilho); }
 
 /* ---------- busca + divisores ---------- */
 .busca { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 14px auto 26px; max-width: 900px; }
@@ -105,7 +105,8 @@ main { max-width: 1320px; margin: 0 auto; padding: 0 16px 40px; }
   transition: transform .2s, filter .2s;
 }
 .card:hover { transform: translateY(-4px); filter: drop-shadow(0 0 12px rgba(240, 164, 58, 0.55)) drop-shadow(0 12px 20px rgba(0, 0, 0, 0.5)); }
-.card.live { filter: drop-shadow(0 0 10px rgba(229, 36, 59, 0.85)) drop-shadow(0 0 22px rgba(229, 36, 59, 0.45)); }
+.card.live { filter: drop-shadow(0 0 10px rgba(170, 90, 255, 0.95)) drop-shadow(0 0 24px rgba(145, 70, 255, 0.6)); }
+.card.live .capa { box-shadow: inset 0 0 0 2px var(--roxo-brilho), 0 0 14px rgba(145, 70, 255, .6); }
 
 .selo-live {
   position: absolute; top: -24px; left: -14px; z-index: 3; line-height: 0;
@@ -134,7 +135,7 @@ main { max-width: 1320px; margin: 0 auto; padding: 0 16px 40px; }
   height: 80%; width: auto; aspect-ratio: 1; border-radius: 50%;
   border: 3px solid var(--ouro); box-shadow: 0 0 0 3px rgba(0, 0, 0, .35), 0 6px 20px rgba(0, 0, 0, .5);
 }
-.card.live .capa .foto.avatar { border-color: var(--vermelho); }
+.card.live .capa .foto.avatar { border-color: var(--roxo-brilho); }
 
 .nome {
   margin: 14px 0 10px; font: 600 21px "Fredoka", sans-serif; color: var(--texto);
