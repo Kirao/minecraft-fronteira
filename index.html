@@ -3,16 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Minecraft Fronteira | Participantes</title>
-  <meta name="description" content="Todos os participantes da série Minecraft Fronteira, quem está ao vivo agora e as redes de cada um." />
-  <link rel="icon" href="logo.webp" />
+  <title>Minecraft Fronteira | Criadores</title>
+  <meta name="description" content="Todos os criadores da série Minecraft Fronteira, quem está ao vivo agora e as redes de cada um." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#1a0f3d" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=3" />
   <script>
-    // aplica o tema salvo antes de desenhar a página (evita "piscar")
     try {
       const t = localStorage.getItem("tema");
       if (t) document.documentElement.dataset.theme = t;
@@ -20,34 +22,42 @@
   </script>
 </head>
 <body>
+  <div class="fundo" aria-hidden="true"></div>
+
+  <button id="tema" class="tema" aria-label="Alternar modo claro/escuro" title="Modo claro/escuro">
+    <i class="fa-solid fa-sun"></i>
+  </button>
+
   <header class="topo">
-    <button id="tema" class="tema" aria-label="Alternar modo claro/escuro" title="Modo claro/escuro">
-      <i class="fa-solid fa-moon"></i>
-    </button>
+    <h1 class="logo">
+      <img src="logo.webp" alt="Minecraft Fronteira" width="700" height="178" />
+    </h1>
 
-    <div class="logo">
-      <img src="logo.webp" alt="Minecraft Fronteira" onerror="this.remove(); document.querySelector('.logo-texto').hidden = false;" />
-      <div class="logo-texto" hidden>
-        <span class="l1">MINECRAFT</span>
-        <span class="l2">FRONTEIRA</span>
-      </div>
-    </div>
-
-    <p class="sub">Participantes da série</p>
-    <div class="contagem" id="contagem"></div>
+    <nav class="abas" aria-label="Grupos">
+      <span class="linha esq" aria-hidden="true"></span>
+      <button class="aba roxo ativa" data-grupo="personagens">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 4l10 10M4 4h3l9 9M4 4v3l9 9M14 14l-2 2m2-2l2-2M13 16l2 3m3-3l-3-2M20 4l-10 10M20 4h-3l-5 5M20 4v3l-5 5M10 14l2 2m-2-2l-2-2M11 16l-2 3m-3-3l3-2"/></svg>
+        Personagens
+      </button>
+      <button class="aba laranja" data-grupo="elementais"><i class="fa-solid fa-fire ico"></i> Elementais</button>
+      <button class="aba ciano" data-grupo="exploradores"><i class="fa-regular fa-compass ico"></i> Exploradores</button>
+      <span class="linha dir" aria-hidden="true"></span>
+    </nav>
   </header>
 
   <main>
-    <div class="filtros">
-      <button class="filtro ativo" data-filtro="todos">Todos</button>
-      <button class="filtro" data-filtro="live"><span class="ponto"></span> Ao vivo</button>
+    <div class="secao">
+      <span class="linha esq" aria-hidden="true"></span>
+      <h2>Criadores</h2>
+      <span class="linha dir" aria-hidden="true"></span>
     </div>
+    <p class="contagem" id="contagem"></p>
     <section id="grade" class="grade" aria-live="polite"></section>
   </main>
 
-  <footer class="rodape">Status ao vivo atualiza sozinho a cada minuto.</footer>
+  <footer class="rodape">Status ao vivo da Twitch atualiza sozinho a cada minuto.</footer>
 
-  <script src="participantes.js"></script>
-  <script src="app.js"></script>
+  <script src="participantes.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
   const grade = document.getElementById("grade");
   const contagem = document.getElementById("contagem");
   let status = {}; // { usuario: { avatar, live } }
-  let filtro = "todos";
+  let grupo = "personagens";
 
   const ICONES = {
     twitch: "fa-brands fa-twitch",
@@ -22,48 +22,49 @@
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const user = (p) => (p.twitch || "").trim().toLowerCase();
+  const aoVivo = (p) => !!status[user(p)]?.live;
 
   function card(p) {
     const u = user(p);
-    const st = status[u] || {};
-    const live = !!st.live;
-    const avatar = p.foto || st.avatar || AVATAR_PADRAO;
-    const linkTwitch = u ? `https://twitch.tv/${u}` : null;
+    const live = aoVivo(p);
+    const avatar = p.foto || status[u]?.avatar || AVATAR_PADRAO;
 
-    const tag = live
-      ? `<a class="tag on" href="${linkTwitch}" target="_blank" rel="noopener"><span class="ponto"></span> Twitch ao vivo</a>`
-      : `<span class="tag off">Offline</span>`;
+    // capa: arte própria (campo "capa") ou a foto em círculo sobre um fundo desfocado
+    const capa = p.capa
+      ? `<img class="foto" src="${esc(p.capa)}" alt="Arte de ${esc(p.nome)}" loading="lazy" />`
+      : `<img class="blur" src="${esc(avatar)}" alt="" aria-hidden="true" />
+         <img class="foto avatar" src="${esc(avatar)}" alt="Foto de ${esc(p.nome)}" onerror="this.src='${AVATAR_PADRAO}'" />`;
+
+    const selo = live
+      ? `<a class="selo-live" href="https://twitch.tv/${u}" target="_blank" rel="noopener"><span class="ponto"></span> Ao vivo</a>`
+      : "";
 
     const redes = Object.entries(p.redes || {})
       .filter(([k, v]) => ICONES[k] && v)
-      .map(([k, v]) => `<a class="${k}" href="${esc(v)}" target="_blank" rel="noopener" title="${NOMES[k]}" aria-label="${NOMES[k]} de ${esc(p.nome)}"><i class="${ICONES[k]}"></i></a>`)
+      .map(([k, v]) => `<a class="${k}" href="${esc(v)}" target="_blank" rel="noopener" title="${NOMES[k]}${k === "twitch" && live ? " (ao vivo)" : ""}" aria-label="${NOMES[k]} de ${esc(p.nome)}"><i class="${ICONES[k]}"></i></a>`)
       .join("");
 
     return `
       <article class="card ${live ? "live" : ""}">
-        <div class="avatar-wrap">
-          <img class="avatar" src="${esc(avatar)}" alt="Foto de ${esc(p.nome)}" loading="lazy" onerror="this.src='${AVATAR_PADRAO}'" />
-        </div>
-        <h2 class="nome">${esc(p.nome)}</h2>
-        ${tag}
+        <div class="capa">${selo}${capa}</div>
+        <h3 class="nome">${esc(p.nome)}</h3>
         <div class="redes">${redes}</div>
       </article>`;
   }
 
   function render() {
-    // quem está ao vivo aparece primeiro
-    const ordenada = [...lista].sort((a, b) => (status[user(b)]?.live ? 1 : 0) - (status[user(a)]?.live ? 1 : 0));
-    const visiveis = filtro === "live" ? ordenada.filter((p) => status[user(p)]?.live) : ordenada;
+    const doGrupo = lista.filter((p) => (p.grupo || "personagens") === grupo);
+    const ordenada = [...doGrupo].sort((a, b) => aoVivo(b) - aoVivo(a));
 
-    grade.innerHTML = visiveis.length
-      ? visiveis.map(card).join("")
-      : `<p class="vazio">${filtro === "live" ? "Ninguém ao vivo agora." : "Nenhum participante cadastrado."}</p>`;
+    grade.innerHTML = ordenada.length
+      ? ordenada.map(card).join("")
+      : `<p class="vazio">Nenhum criador neste grupo ainda.</p>`;
 
-    const aoVivo = lista.filter((p) => status[user(p)]?.live).length;
-    contagem.innerHTML = `${lista.length} participantes · <b>${aoVivo} ao vivo</b>`;
+    const vivos = lista.filter(aoVivo).length;
+    contagem.innerHTML = `${lista.length} criadores · <b>${vivos} ao vivo agora</b>`;
   }
 
-  // consulta direta (usada quando a função /api não existe, ex.: abrindo o arquivo no PC)
+  // consulta direta (quando a função /api não existe, ex.: abrindo o arquivo no PC)
   async function direto(users) {
     const out = {};
     await Promise.all(
@@ -91,21 +92,19 @@
     render();
   }
 
-  // filtros
-  document.querySelectorAll(".filtro").forEach((b) =>
+  // abas
+  document.querySelectorAll(".aba").forEach((b) =>
     b.addEventListener("click", () => {
-      document.querySelectorAll(".filtro").forEach((x) => x.classList.remove("ativo"));
-      b.classList.add("ativo");
-      filtro = b.dataset.filtro;
+      document.querySelectorAll(".aba").forEach((x) => x.classList.remove("ativa"));
+      b.classList.add("ativa");
+      grupo = b.dataset.grupo;
       render();
     })
   );
 
-  // modo claro / escuro
+  // modo claro / escuro (padrão: escuro)
   const btnTema = document.getElementById("tema");
-  const temaAtual = () =>
-    document.documentElement.dataset.theme ||
-    (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+  const temaAtual = () => document.documentElement.dataset.theme || "dark";
   const iconeTema = () => (btnTema.innerHTML = `<i class="fa-solid ${temaAtual() === "dark" ? "fa-sun" : "fa-moon"}"></i>`);
   btnTema.addEventListener("click", () => {
     const novo = temaAtual() === "dark" ? "light" : "dark";
