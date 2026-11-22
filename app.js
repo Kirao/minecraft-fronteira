@@ -3,8 +3,15 @@
   const grade = document.getElementById("grade");
   const contagem = document.getElementById("contagem");
   const busca = document.getElementById("busca");
-  let status = {}; // { usuario: { avatar, live } }
-  let carregou = false;
+  // último status guardado no aparelho: a página já abre mostrando quem está ao vivo
+  // (vale 10 min) enquanto a consulta nova chega
+  const guardaStatus = (s) => { try { localStorage.setItem("fronteira-status", JSON.stringify({ s, t: Date.now() })); } catch (e) {} };
+  const statusGuardado = () => {
+    try { const g = JSON.parse(localStorage.getItem("fronteira-status")); if (g && Date.now() - g.t < 600000) return g.s; } catch (e) {}
+    return null;
+  };
+  let status = statusGuardado() || {}; // { usuario: { avatar, live } }
+  let carregou = !!statusGuardado();
   let soLive = false;
   const btnLive = document.getElementById("so-live");
   btnLive?.addEventListener("click", () => {
@@ -106,6 +113,7 @@
       const r = await fetch("/api/twitch" + (forcar ? `?fresh=${Math.floor(Date.now() / 20000)}` : ""), forcar ? { cache: "no-store" } : {});
       if (!r.ok) throw new Error();
       status = await r.json();
+      guardaStatus(status);
       carregou = true;
     } catch (e) {
       try { status = await direto(users); carregou = true; } catch (e2) {}

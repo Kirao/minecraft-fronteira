@@ -57,14 +57,18 @@ const EH_TEMPO = /\d+\s+(second|minute|hour|day)s?/i;
 const memoria = {}; // { canal: { live, quando } } último status confirmado (vale só por 3 minutos)
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function consultaUptime(u) {
-  for (let tentativa = 0; tentativa < 3; tentativa++) {
-    const txt = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(u)}`)
+// o decapi às vezes demora 8s+ por canal: cada consulta tem limite de 5s e a rodada
+// inteira tem limite de ~12s (o que faltar usa o último valor conhecido)
+async function consultaUptime(u, prazo) {
+  for (let tentativa = 0; tentativa < 2 && Date.now() < prazo; tentativa++) {
+    const txt = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(u)}`, {
+      signal: AbortSignal.timeout(Math.max(1000, Math.min(5000, prazo - Date.now()))),
+    })
       .then((r) => (r.ok ? r.text() : ""))
       .catch(() => "");
     if (/offline/i.test(txt)) return false;
     if (EH_TEMPO.test(txt)) return true;
-    await esperar(400 + tentativa * 600);
+    await esperar(300);
   }
   return null; // não deu pra saber
 }
@@ -73,10 +77,11 @@ async function viaDecapi(users) {
   const out = {};
   let desconhecidos = 0;
   const fila = [...users];
+  const prazo = Date.now() + 12000;
   async function trabalhador() {
     while (fila.length) {
       const u = fila.shift();
-      const live = await consultaUptime(u);
+      const live = Date.now() < prazo ? await consultaUptime(u, prazo) : null;
       if (live === null) {
         desconhecidos++;
         const m = memoria[u];
@@ -87,7 +92,7 @@ async function viaDecapi(users) {
       }
     }
   }
-  await Promise.all(Array.from({ length: 3 }, trabalhador)); // 3 por vez para não estourar o limite
+  await Promise.all(Array.from({ length: 6 }, trabalhador)); // 6 por vez
   return { out, desconhecidos };
 }
 
@@ -110,7 +115,7 @@ export default async function handler(req, res) {
   const pedeNovo = fresh === bloco || fresh === bloco - 1;
 
   if (!pedeNovo && ultimoResultado && Date.now() - ultimoResultado.quando < RESULTADO_VALE) {
-    res.setHeader("Cache-Control", "s-maxage=45, stale-while-revalidate=30");
+    res.setHeader("Cache-Control", "s-maxage=45, stale-while-revalidate=600");
     return res.status(200).json(ultimoResultado.dados);
   }
 
@@ -119,15 +124,17 @@ export default async function handler(req, res) {
     if (id && secret) {
       const data = await viaHelix(users, id, secret);
       ultimoResultado = { dados: data, quando: Date.now() };
-      res.setHeader("Cache-Control", pedeNovo ? "s-maxage=20" : "s-maxage=45, stale-while-revalidate=120");
+      res.setHeader("Cache-Control", pedeNovo ? "s-maxage=20" : "s-maxage=45, stale-while-revalidate=600");
       return res.status(200).json(data);
     }
     const { out, desconhecidos } = await viaDecapi(users);
     if (!desconhecidos) ultimoResultado = { dados: out, quando: Date.now() };
-    // resposta completa fica no cache da Vercel (todo mundo vê a mesma);
+    // resposta fica no cache da Vercel (todo mundo vê a mesma). stale-while-revalidate:
+    // depois de um tempo parado, o próximo visitante recebe a última resposta na hora
+    // e a Vercel atualiza por trás (o decapi é lento, ninguém fica esperando);
     // se faltou algum canal, guarda só 10s para tentar de novo logo
     if (pedeNovo) res.setHeader("Cache-Control", "s-maxage=20");
-    else res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10" : "s-maxage=45, stale-while-revalidate=30");
+    else res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10, stale-while-revalidate=600" : "s-maxage=45, stale-while-revalidate=600");
     return res.status(200).json(out);
   } catch (e) {
     return res.status(502).json({ error: "falha ao consultar a Twitch" });

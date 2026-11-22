@@ -14,6 +14,13 @@
 
   const params = new URLSearchParams(location.search);
   let selecionados = (params.get("c") || "").split(",").map((s) => s.trim().toLowerCase()).filter((u) => porUser[u]);
+  // último status guardado no aparelho (vale 10 min): a página já abre mostrando
+  // quem está ao vivo enquanto a consulta nova chega. Mesmo formato do app.js.
+  const guardaStatus = (s) => { try { localStorage.setItem("fronteira-status", JSON.stringify({ s, t: Date.now() })); } catch (e) {} };
+  const statusGuardado = () => {
+    try { const g = JSON.parse(localStorage.getItem("fronteira-status")); if (g && Date.now() - g.t < 600000) return g.s; } catch (e) {}
+    return null;
+  };
   let aoVivo = [];
   let chatDe = selecionados[0] || null;
   let chatAberto = params.get("chat") !== "0" && window.innerWidth > 700;
@@ -125,14 +132,21 @@
     setTimeout(() => aviso.classList.remove("on"), 1800);
   });
 
-  async function atualizar() {
+  async function atualizar(jaTenho) {
     const users = Object.keys(porUser);
-    try {
-      const r = await fetch("/api/twitch");
-      const status = await r.json();
-      aoVivo = users.filter((u) => status[u]?.live);
-    } catch (e) {
-      aoVivo = [];
+    if (jaTenho) {
+      aoVivo = users.filter((u) => jaTenho[u]?.live);
+    } else {
+      try {
+        const r = await fetch("/api/twitch");
+        if (!r.ok) throw new Error();
+        const status = await r.json();
+        guardaStatus(status);
+        aoVivo = users.filter((u) => status[u]?.live);
+      } catch (e) {
+        const g = statusGuardado();
+        aoVivo = g ? users.filter((u) => g[u]?.live) : [];
+      }
     }
     // na primeira vez, se não veio nada no link, já abre as 2 primeiras lives
     if (!atualizar.feito && !selecionados.length && aoVivo.length) {
@@ -140,12 +154,13 @@
       chatDe = selecionados[0];
       salvarUrl();
     }
-    atualizar.feito = true;
+    if (!jaTenho || aoVivo.length) atualizar.feito = true;
     desenharLista();
     desenharTelas();
   }
 
   desenharTelas();
+  if (statusGuardado()) atualizar(statusGuardado()); // abre na hora com o último status
   atualizar();
   // só atualiza sozinho com a aba visível; ao voltar pra aba, atualiza se já passou 1 min
   let ultimaVez = Date.now();
