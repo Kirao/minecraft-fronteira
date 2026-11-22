@@ -20,22 +20,21 @@
   <div class="fundo" aria-hidden="true"></div>
 
   <header class="multi-topo">
-    <a class="voltar" href="./"><i class="fa-solid fa-arrow-left"></i> Criadores</a>
+    <a class="voltar img-btn" href="./" aria-label="Voltar para Criadores"><img src="ui/ms_voltar.webp" alt="← Criadores" width="226" height="70" /></a>
     <a href="./" class="multi-logo"><img src="logo.webp" alt="Minecraft Fronteira" width="700" height="178" /></a>
     <div class="multi-acoes">
-      <button id="btn-chat" class="acao" title="Mostrar/esconder chat"><i class="fa-solid fa-comments"></i> Chat</button>
-      <button id="btn-link" class="acao" title="Copiar link desta seleção"><i class="fa-solid fa-link"></i> Copiar link</button>
+      <button id="btn-chat" class="acao img-btn" title="Mostrar/esconder chat" aria-label="Chat"><img src="ui/ms_chatbtn.webp" alt="Chat" width="210" height="64" /></button>
+      <button id="btn-link" class="acao img-btn" title="Copiar link desta seleção" aria-label="Copiar link"><img src="ui/ms_link.webp" alt="Copiar Link" width="252" height="64" /><span class="aviso" id="aviso-link"></span></button>
     </div>
   </header>
 
   <section class="seletor">
     <div class="seletor-titulo">
-      <img src="ui/divisor2.webp" alt="" aria-hidden="true" class="div-esq" />
       <h1>Multistream</h1>
-      <img src="ui/divisor2.webp" alt="" aria-hidden="true" />
     </div>
     <p class="dica" id="dica">Carregando quem está ao vivo...</p>
     <div class="lista-live" id="lista-live"></div>
+    <img class="divisor-ms" src="ui/ms_divisor.webp" alt="" aria-hidden="true" />
   </section>
 
   <main class="palco" id="palco">

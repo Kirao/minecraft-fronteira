@@ -59,6 +59,10 @@
         t.className = "tela";
         t.dataset.u = u;
         t.innerHTML = `
+          <div class="cabeca-tela">
+            <img class="selo-ms" src="ui/ms_aovivo.webp" alt="Ao vivo" />
+            <span class="nome-tela">${esc(nome(u))}</span>
+          </div>
           <div class="barra-tela">
             <button data-acao="chat" title="Ver o chat de ${esc(nome(u))}"><i class="fa-solid fa-comments"></i></button>
             <button data-acao="sair" title="Tirar da tela"><i class="fa-solid fa-xmark"></i></button>
@@ -113,13 +117,11 @@
   });
   btnChat.addEventListener("click", () => { chatAberto = !chatAberto; salvarUrl(); desenharChat(); });
   btnLink.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(location.href);
-      btnLink.innerHTML = '<i class="fa-solid fa-check"></i> Copiado!';
-    } catch (e) {
-      btnLink.innerHTML = '<i class="fa-solid fa-xmark"></i> Não deu';
-    }
-    setTimeout(() => (btnLink.innerHTML = '<i class="fa-solid fa-link"></i> Copiar link'), 2000);
+    const aviso = document.getElementById("aviso-link");
+    try { await navigator.clipboard.writeText(location.href); aviso.textContent = "Copiado!"; }
+    catch (e) { aviso.textContent = "Não deu para copiar"; }
+    aviso.classList.add("on");
+    setTimeout(() => aviso.classList.remove("on"), 1800);
   });
 
   async function atualizar() {

@@ -104,3 +104,42 @@
   .telas, .telas.n2, .telas.n3, .telas.n4, .telas.n5, .telas.n6, .telas.nmuitos { grid-template-columns: 1fr; }
   .tela .barra-tela { opacity: 1; }
 }
+
+/* ===== kit do multistream ===== */
+.img-btn { padding: 0 !important; border: 0 !important; background: none !important; box-shadow: none !important; line-height: 0; position: relative; cursor: pointer; transition: transform .15s, filter .15s; }
+.img-btn img { height: 44px; width: auto; display: block; }
+.img-btn:hover { transform: translateY(-2px); filter: drop-shadow(0 0 10px rgba(240, 164, 58, .6)); }
+.acao.img-btn.ativo { filter: drop-shadow(0 0 10px rgba(181, 123, 255, .95)); }
+.acao.img-btn:not(.ativo)#btn-chat { opacity: .7; }
+.aviso {
+  position: absolute; top: 110%; left: 50%; transform: translateX(-50%);
+  background: var(--roxo); color: #fff; font: 600 12px "Fredoka", sans-serif; line-height: 1.2;
+  padding: 4px 10px; border-radius: 999px; white-space: nowrap; opacity: 0; transition: opacity .2s; pointer-events: none;
+}
+.aviso.on { opacity: 1; }
+.divisor-ms { display: block; width: min(760px, 92%); height: auto; margin: 12px auto 0; }
+
+.tela {
+  border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible;
+  border-style: solid; border-width: 34px 14px 26px; border-color: transparent;
+  border-image: url("ui/ms_player.webp") 58 22 42 22 fill / 34px 14px 26px / 0 stretch;
+  aspect-ratio: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .55));
+}
+.tela iframe { position: static; display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 4px; background: #0c0820; }
+.cabeca-tela { position: absolute; top: -30px; left: 4px; right: 70px; height: 26px; display: flex; align-items: center; gap: 8px; z-index: 2; }
+.selo-ms { height: 24px; width: auto; }
+.nome-tela { font: 600 14px "Fredoka", sans-serif; color: var(--texto); text-shadow: 0 1px 4px rgba(0, 0, 0, .7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tela .barra-tela { top: -31px; right: 0; opacity: 1; }
+.barra-tela button { width: 26px; height: 26px; font-size: 12px; }
+
+.chat {
+  border: 0; border-radius: 0; background: transparent; overflow: visible;
+  border-style: solid; border-width: 30px 14px 28px; border-color: transparent;
+  border-image: url("ui/ms_chat.webp") 44 22 44 22 fill / 30px 14px 28px / 0 stretch;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .55));
+}
+.chat-abas { background: transparent; border-bottom: 1px solid rgba(240, 164, 58, .35); }
+.chat iframe { border-radius: 4px; }
+.vazio-palco { border-style: solid; border-width: 34px 14px 26px; border-color: transparent; border-radius: 0;
+  border-image: url("ui/ms_player.webp") 58 22 42 22 fill / 34px 14px 26px / 0 stretch; background: transparent; }
+@media (max-width: 700px) { .img-btn img { height: 38px; } }
