@@ -68,7 +68,7 @@ export default async function handler(req, res) {
   try {
     const { TWITCH_CLIENT_ID: id, TWITCH_CLIENT_SECRET: secret } = process.env;
     const data = id && secret ? await viaHelix(users, id, secret) : await viaDecapi(users);
-    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=120");
+    res.setHeader("Cache-Control", "s-maxage=45");
     return res.status(200).json(data);
   } catch (e) {
     return res.status(502).json({ error: "falha ao consultar a Twitch" });

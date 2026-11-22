@@ -58,7 +58,7 @@ body {
 }
 
 /* ---------- título "Criadores" (botão do kit) ---------- */
-main { max-width: 1180px; margin: 0 auto; padding: 0 16px 40px; }
+main { max-width: 1320px; margin: 0 auto; padding: 0 16px 40px; }
 .titulo { margin: 22px 0 0; text-align: center; line-height: 0; }
 .titulo img { width: min(320px, 78vw); height: auto; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5)); }
 .contagem { text-align: center; margin: 10px 0 0; font-size: 14px; color: var(--texto2); min-height: 20px; }
@@ -86,9 +86,10 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 16px 40px; }
 .campo:focus-within { border-color: var(--ouro); box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 12px rgba(240, 164, 58, 0.45); }
 
 /* ---------- grade ---------- */
-.grade { display: flex; flex-wrap: wrap; justify-content: center; gap: 26px; }
-.card { width: calc((100% - 3 * 26px) / 4); }
-@media (max-width: 1000px) { .card { width: calc((100% - 2 * 26px) / 3); } }
+.grade { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; }
+.card { width: calc((100% - 4 * 22px) / 5); }
+@media (max-width: 1150px) { .card { width: calc((100% - 3 * 22px) / 4); } }
+@media (max-width: 900px)  { .card { width: calc((100% - 2 * 22px) / 3); } }
 @media (max-width: 720px)  { .grade { gap: 14px; } .card { width: calc((100% - 14px) / 2); } }
 @media (max-width: 340px)  { .card { width: 100%; max-width: 300px; } }
 
@@ -194,3 +195,10 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 16px 40px; }
 .credito img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--ouro); }
 .credito b { font-family: "Fredoka", sans-serif; font-weight: 600; color: var(--ouro2); }
 .credito i { color: #8c96ff; font-size: 18px; }
+.creditos { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 14px; }
+.creditos .credito { margin-top: 0; }
+.credito.link { text-decoration: none; padding: 5px 14px; height: 44px; transition: .15s; }
+.credito.link i { color: var(--ouro); font-size: 16px; }
+.credito.link .seta { font-size: 11px; opacity: .7; }
+.credito.link:hover { border-color: var(--ouro); box-shadow: 0 0 12px rgba(240, 164, 58, 0.45); }
+.credito { height: 44px; }

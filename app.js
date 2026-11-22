@@ -59,7 +59,7 @@
     const termo = (busca?.value || "").trim().toLowerCase();
     const ordenada = [...lista]
       .filter((p) => !termo || p.nome.toLowerCase().includes(termo) || user(p).includes(termo))
-      .sort((a, b) => aoVivo(b) - aoVivo(a));
+      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR", { sensitivity: "base" }));
 
     grade.innerHTML = ordenada.length
       ? ordenada.map(card).join("")
@@ -89,7 +89,7 @@
     const users = [...new Set(lista.map(user).filter(Boolean))];
     if (!users.length) return render();
     try {
-      const r = await fetch(`/api/twitch?users=${users.join(",")}`);
+      const r = await fetch(`/api/twitch?users=${users.join(",")}&t=${Math.floor(Date.now() / 60000)}`, { cache: "no-store" });
       if (!r.ok) throw new Error();
       status = await r.json();
     } catch (e) {
