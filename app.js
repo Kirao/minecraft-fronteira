@@ -4,6 +4,7 @@
   const contagem = document.getElementById("contagem");
   const busca = document.getElementById("busca");
   let status = {}; // { usuario: { avatar, live } }
+  let carregou = false;
 
   const ICONES = {
     twitch: "fa-brands fa-twitch",
@@ -67,7 +68,9 @@
       : `<p class="vazio">${termo ? "Nenhum criador encontrado." : "Nenhum criador cadastrado ainda."}</p>`;
 
     const vivos = lista.filter(aoVivo).length;
-    contagem.innerHTML = `${lista.length} criadores · <b>${vivos} ao vivo agora</b>`;
+    contagem.innerHTML = carregou
+      ? `${lista.length} criadores · <b>${vivos} ao vivo agora</b>`
+      : `${lista.length} criadores · <i class="fa-solid fa-spinner fa-spin"></i> verificando quem está ao vivo...`;
   }
 
   // consulta direta (quando a função /api não existe, ex.: abrindo o arquivo no PC)
@@ -93,6 +96,7 @@
       const r = await fetch(`/api/twitch?users=${users.join(",")}`);
       if (!r.ok) throw new Error();
       status = await r.json();
+      carregou = true;
     } catch (e) {
       try { status = await direto(users); } catch (e2) {}
     }
