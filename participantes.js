@@ -5,7 +5,8 @@
 //  twitch:  usuário da Twitch (o que vem depois de twitch.tv/).
 //           O status "ao vivo" vem daqui (e a foto, se não tiver "foto").
 //  foto:    (opcional) foto no lugar da da Twitch: coloque o arquivo em fotos/ ou use um link
-//  capa:    (opcional) link de uma arte/imagem larga para preencher o topo do card
+//  personagem: (opcional) nome do personagem na série; aparece em destaque no card
+//  capa:    (opcional) arte do personagem que preenche o topo do card (pasta personagens/)
 //  redes:   links das redes sociais. Apague as linhas que a pessoa não tem.
 //           Redes aceitas: twitch, youtube, kick, tiktok, instagram, x, discord
 //           Para dois canais da mesma rede, use um número: youtube, youtube2...
@@ -14,6 +15,8 @@
 window.PARTICIPANTES = [
   {
     nome: "Biox",
+    personagem: "Bioxs",
+    capa: "personagens/biox.webp",
     twitch: "bioxs",
     foto: "fotos/biox.jpg",
     redes: {
@@ -25,6 +28,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Mamão",
+    personagem: "Mamão",
+    capa: "personagens/mamao.webp",
     twitch: "mamao170",
     foto: "fotos/mamao.jpg",
     redes: {
@@ -35,6 +40,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "oiRosa",
+    personagem: "Rosa",
+    capa: "personagens/oirosa.webp",
     twitch: "oirosa",
     foto: "fotos/oirosa.jpg",
     redes: {
@@ -54,6 +61,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "BrunimNeets",
+    personagem: "Bruninho",
+    capa: "personagens/brunimneets.webp",
     twitch: "brunimneets",
     foto: "fotos/brunimneets.jpg",
     redes: {
@@ -63,6 +72,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "CarlinDoPlay",
+    personagem: "CarlinDoPlay",
+    capa: "personagens/carlindoplay.webp",
     twitch: "",
     foto: "fotos/carlindoplay.jpg",
     redes: {
@@ -71,6 +82,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Dansuri",
+    personagem: "Dansuri",
+    capa: "personagens/dansuri.webp",
     twitch: "dansurioff",
     foto: "fotos/dansuri.jpg",
     redes: {
@@ -80,6 +93,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Dejota",
+    personagem: "Dejota",
+    capa: "personagens/dejota.webp",
     twitch: "dej0ta2",
     foto: "fotos/dejota.png",
     redes: {
@@ -88,6 +103,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "DletGamer",
+    personagem: "Dletinho Valey",
+    capa: "personagens/dletgamer.webp",
     twitch: "dletgamer",
     foto: "fotos/dletgamer.jpg",
     redes: {
@@ -98,6 +115,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Donepi",
+    personagem: "Donepi",
+    capa: "personagens/donepi.webp",
     twitch: "donepi",
     foto: "fotos/donepi.jpg",
     redes: {
@@ -108,6 +127,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Elfo",
+    personagem: "Meio-Elfo",
+    capa: "personagens/elfo.webp",
     twitch: "elfo",
     foto: "fotos/elfo.jpg",
     redes: {
@@ -119,6 +140,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "EsponjaPerdida",
+    personagem: "Esponja",
+    capa: "personagens/esponjaperdida.webp",
     twitch: "esponjaperdida",
     foto: "fotos/esponjaperdida.jpg",
     redes: {
@@ -137,6 +160,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "ForeverPlayerG",
+    personagem: "Forever",
+    capa: "personagens/forever.webp",
     twitch: "forever",
     foto: "fotos/forever.jpg",
     redes: {
@@ -146,6 +171,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "GaloPunk",
+    personagem: "Galopunk",
+    capa: "personagens/galopunk.webp",
     twitch: "galopunk",
     foto: "fotos/galopunk.jpg",
     redes: {
@@ -155,6 +182,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Glittertai",
+    personagem: "Glittertai",
+    capa: "personagens/glittertai.webp",
     twitch: "glittertai",
     foto: "fotos/glittertai.jpg",
     redes: {
@@ -164,18 +193,24 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Graciella Gabriella Florisbella",
+    personagem: "Graciella Gabriella Florisbella",
+    capa: "personagens/graciella.webp",
     twitch: "",
     redes: {
     },
   },
   {
     nome: "Isabella Bella Annabella",
+    personagem: "Isabella Bella Annabella",
+    capa: "personagens/isabella.webp",
     twitch: "",
     redes: {
     },
   },
   {
     nome: "Loonely21",
+    personagem: "Loonely",
+    capa: "personagens/loonely21.webp",
     twitch: "loonely21",
     foto: "fotos/loonely21.jpg",
     redes: {
@@ -185,6 +220,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "LucasG305",
+    personagem: "LucasG305",
+    capa: "personagens/lucasg305.webp",
     twitch: "olucas305",
     foto: "fotos/lucasg305.jpg",
     redes: {
@@ -194,6 +231,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Maggo",
+    personagem: "Maggo",
+    capa: "personagens/maggo.webp",
     twitch: "themaggo",
     foto: "fotos/maggo.jpg",
     redes: {
@@ -203,6 +242,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "PandaColore",
+    personagem: "Panda",
+    capa: "personagens/pandacolore.webp",
     twitch: "pandacolore",
     foto: "fotos/pandacolore.jpg",
     redes: {
@@ -212,6 +253,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Sanziitos",
+    personagem: "San",
+    capa: "personagens/sanziitos.webp",
     twitch: "sanziitos",
     foto: "fotos/sanziitos.jpg",
     redes: {
@@ -222,6 +265,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "souajenni",
+    personagem: "Jenni",
+    capa: "personagens/souajenni.webp",
     twitch: "souajenni",
     foto: "fotos/souajenni.jpg",
     redes: {
@@ -231,6 +276,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Starzinnn",
+    personagem: "Starzin",
+    capa: "personagens/starzinnn.webp",
     twitch: "starzinnnkk",
     foto: "fotos/starzinnn.jpg",
     redes: {
@@ -241,6 +288,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Summer",
+    personagem: "Summer",
+    capa: "personagens/summer.webp",
     twitch: "summeryyy__",
     foto: "fotos/summer.jpg",
     redes: {
@@ -249,6 +298,8 @@ window.PARTICIPANTES = [
   },
   {
     nome: "Yayah",
+    personagem: "Yayah",
+    capa: "personagens/yayah.webp",
     twitch: "yayahgatinha",
     foto: "fotos/yayah.jpg",
     redes: {

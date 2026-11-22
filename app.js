@@ -31,12 +31,12 @@
 
     // capa: arte própria (campo "capa") ou a foto em círculo sobre um fundo desfocado
     const capa = p.capa
-      ? `<img class="foto" src="${esc(p.capa)}" alt="Arte de ${esc(p.nome)}" loading="lazy" />`
+      ? `<img class="foto arte" src="${esc(p.capa)}" alt="${esc(p.personagem || p.nome)}" loading="lazy" />`
       : `<img class="blur" src="${esc(avatar)}" alt="" aria-hidden="true" />
          <img class="foto avatar" src="${esc(avatar)}" alt="Foto de ${esc(p.nome)}" onerror="this.src='${AVATAR_PADRAO}'" />`;
 
     const selo = live
-      ? `<a class="selo-live" href="https://twitch.tv/${u}" target="_blank" rel="noopener"><i class="fa-solid fa-tower-broadcast"></i> Ao vivo</a>`
+      ? `<a class="selo-live" href="https://twitch.tv/${u}" target="_blank" rel="noopener"><img src="ui/aovivo.webp" alt="Ao vivo" width="345" height="95" /></a>`
       : "";
 
     // "youtube2", "twitch2"... usam o mesmo ícone da rede
@@ -50,7 +50,8 @@
       <article class="card ${live ? "live" : ""}">
         ${selo}
         <div class="capa">${capa}</div>
-        <h3 class="nome">${esc(p.nome)}</h3>
+        <h3 class="nome">${esc(p.personagem || p.nome)}</h3>
+        ${p.personagem && p.personagem.toLowerCase() !== p.nome.toLowerCase() ? `<p class="criador">${esc(p.nome)}</p>` : ""}
         <div class="redes">${redes}</div>
       </article>`;
   }
@@ -58,8 +59,8 @@
   function render() {
     const termo = (busca?.value || "").trim().toLowerCase();
     const ordenada = [...lista]
-      .filter((p) => !termo || p.nome.toLowerCase().includes(termo) || user(p).includes(termo))
-      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR", { sensitivity: "base" }));
+      .filter((p) => !termo || [p.nome, p.personagem || "", user(p)].some((t) => t.toLowerCase().includes(termo)))
+      .sort((a, b) => (a.personagem || a.nome).localeCompare(b.personagem || b.nome, "pt-BR", { sensitivity: "base" }));
 
     grade.innerHTML = ordenada.length
       ? ordenada.map(card).join("")
