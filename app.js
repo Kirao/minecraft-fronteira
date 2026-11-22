@@ -27,7 +27,7 @@
     const u = user(p);
     const st = status[u] || {};
     const live = !!st.live;
-    const avatar = st.avatar || AVATAR_PADRAO;
+    const avatar = p.foto || st.avatar || AVATAR_PADRAO;
     const linkTwitch = u ? `https://twitch.tv/${u}` : null;
 
     const tag = live
