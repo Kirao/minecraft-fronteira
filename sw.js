@@ -1,6 +1,6 @@
 // Service worker: deixa o site abrir rápido e funcionar como app (até sem internet,
 // mostrando a última versão salva). Status ao vivo e contador sempre vêm da rede.
-const VERSAO = "fronteira-v26";
+const VERSAO = "fronteira-v27";
 const BASICO = ["/", "/index.html", "/multistream.html", "/manifest.webmanifest", "/favicon.svg", "/icon-192.png", "/logo.webp"];
 
 self.addEventListener("install", (e) => {

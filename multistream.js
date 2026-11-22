@@ -128,7 +128,7 @@
   async function atualizar() {
     const users = Object.keys(porUser);
     try {
-      const r = await fetch(`/api/twitch?users=${users.join(",")}`);
+      const r = await fetch("/api/twitch");
       const status = await r.json();
       aoVivo = users.filter((u) => status[u]?.live);
     } catch (e) {
@@ -147,5 +147,10 @@
 
   desenharTelas();
   atualizar();
-  setInterval(atualizar, 60000);
+  // só atualiza sozinho com a aba visível; ao voltar pra aba, atualiza se já passou 1 min
+  let ultimaVez = Date.now();
+  setInterval(() => { if (!document.hidden) { ultimaVez = Date.now(); atualizar(); } }, 60000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && Date.now() - ultimaVez > 60000) { ultimaVez = Date.now(); atualizar(); }
+  });
 })();

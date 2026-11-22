@@ -103,7 +103,7 @@
     const users = [...new Set(lista.map(user).filter(Boolean))];
     if (!users.length) return render();
     try {
-      const r = await fetch(`/api/twitch?users=${users.join(",")}` + (forcar ? `&fresh=${Date.now()}` : ""), forcar ? { cache: "no-store" } : {});
+      const r = await fetch("/api/twitch" + (forcar ? `?fresh=${Math.floor(Date.now() / 20000)}` : ""), forcar ? { cache: "no-store" } : {});
       if (!r.ok) throw new Error();
       status = await r.json();
       carregou = true;
@@ -117,7 +117,12 @@
 
   render();
   atualizar();
-  setInterval(() => atualizar(), 60000);
+  // só atualiza sozinho com a aba visível; ao voltar pra aba, atualiza se já passou 1 min
+  let ultimaVez = Date.now();
+  setInterval(() => { if (!document.hidden) { ultimaVez = Date.now(); atualizar(); } }, 60000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && Date.now() - ultimaVez > 60000) { ultimaVez = Date.now(); atualizar(); }
+  });
 
   // pop-up de aviso (some sozinho)
   function toast(sub) {

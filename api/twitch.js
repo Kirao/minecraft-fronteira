@@ -1,7 +1,21 @@
-// Função da Vercel: /api/twitch?users=nome1,nome2
+// Função da Vercel: /api/twitch
 // Devolve a foto de perfil e se cada canal está ao vivo.
+// Consulta SEMPRE a lista fixa de participantes.js (ignora nomes pedidos na URL),
+// assim robôs não conseguem gastar a cota pedindo listas inventadas.
 // Se TWITCH_CLIENT_ID e TWITCH_CLIENT_SECRET estiverem configurados na Vercel,
 // usa a API oficial da Twitch. Senão, usa o serviço público decapi.me.
+
+import { readFileSync } from "node:fs";
+
+let CANAIS = [];
+try {
+  const txt = readFileSync(new URL("../participantes.js", import.meta.url), "utf8");
+  CANAIS = [...new Set([...txt.matchAll(/\btwitch:\s*"([a-z0-9_]{2,25})"/gi)].map((m) => m[1].toLowerCase()))].sort();
+} catch (e) {}
+
+// último resultado completo na memória da função: segura rajadas de pedidos
+let ultimoResultado = null; // { dados, quando }
+const RESULTADO_VALE = 30 * 1000;
 
 let cachedToken = null;
 
@@ -78,25 +92,41 @@ async function viaDecapi(users) {
 }
 
 export default async function handler(req, res) {
-  const users = String(req.query.users || "")
-    .split(",")
-    .map((u) => u.trim().toLowerCase())
-    .filter((u) => /^[a-z0-9_]{2,25}$/.test(u))
-    .slice(0, 100);
-
+  // lista fixa. Só se participantes.js não carregou, aceita a do pedido (nomes válidos, máx. 60).
+  let users = CANAIS;
+  if (!users.length) {
+    users = String(req.query.users || "")
+      .split(",")
+      .map((u) => u.trim().toLowerCase())
+      .filter((u) => /^[a-z0-9_]{2,25}$/.test(u))
+      .slice(0, 60);
+  }
   if (!users.length) return res.status(200).json({});
+
+  // botão "Atualizar": ?fresh=<bloco de 20s>. Só vale o bloco atual, então todo mundo
+  // que apertar no mesmo bloco divide a mesma resposta do cache.
+  const bloco = Math.floor(Date.now() / 20000);
+  const fresh = Number(req.query.fresh);
+  const pedeNovo = fresh === bloco || fresh === bloco - 1;
+
+  if (!pedeNovo && ultimoResultado && Date.now() - ultimoResultado.quando < RESULTADO_VALE) {
+    res.setHeader("Cache-Control", "s-maxage=45, stale-while-revalidate=30");
+    return res.status(200).json(ultimoResultado.dados);
+  }
 
   try {
     const { TWITCH_CLIENT_ID: id, TWITCH_CLIENT_SECRET: secret } = process.env;
     if (id && secret) {
       const data = await viaHelix(users, id, secret);
-      res.setHeader("Cache-Control", "s-maxage=45, stale-while-revalidate=120");
+      ultimoResultado = { dados: data, quando: Date.now() };
+      res.setHeader("Cache-Control", pedeNovo ? "s-maxage=20" : "s-maxage=45, stale-while-revalidate=120");
       return res.status(200).json(data);
     }
     const { out, desconhecidos } = await viaDecapi(users);
-    // resposta completa fica 60s no cache da Vercel (todo mundo vê a mesma);
+    if (!desconhecidos) ultimoResultado = { dados: out, quando: Date.now() };
+    // resposta completa fica no cache da Vercel (todo mundo vê a mesma);
     // se faltou algum canal, guarda só 10s para tentar de novo logo
-    if (req.query.fresh) res.setHeader("Cache-Control", "no-store");
+    if (pedeNovo) res.setHeader("Cache-Control", "s-maxage=20");
     else res.setHeader("Cache-Control", desconhecidos ? "s-maxage=10" : "s-maxage=45, stale-while-revalidate=30");
     return res.status(200).json(out);
   } catch (e) {

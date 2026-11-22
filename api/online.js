@@ -38,6 +38,11 @@ export default async function handler(req, res) {
   const url = new URL(req.url, "http://x");
   const id = (url.searchParams.get("id") || "").replace(/[^a-z0-9-]/gi, "").slice(0, 40);
   const sair = url.searchParams.get("sair") === "1";
+  // sem id (robô batendo na URL): não conta nada e a resposta fica no cache
+  if (id.length < 6) {
+    res.setHeader("Cache-Control", "s-maxage=60");
+    return res.status(400).json({ erro: "faltou id" });
+  }
 
   let online;
   if (REDIS_URL && REDIS_TOKEN) {
