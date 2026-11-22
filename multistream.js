@@ -64,8 +64,8 @@
             <span class="nome-tela">${esc(nome(u))}</span>
           </div>
           <div class="barra-tela">
-            <button data-acao="chat" title="Ver o chat de ${esc(nome(u))}"><i class="fa-solid fa-comments"></i></button>
-            <button data-acao="sair" title="Tirar da tela"><i class="fa-solid fa-xmark"></i></button>
+            <button data-acao="chat" title="Ver o chat de ${esc(nome(u))}"><i class="fa-solid fa-comments"></i> Chat</button>
+            <button data-acao="sair" title="Tirar da tela" aria-label="Tirar da tela"><i class="fa-solid fa-xmark"></i></button>
           </div>
           <iframe src="https://player.twitch.tv/?channel=${encodeURIComponent(u)}&parent=${PARENT}&muted=${i === 0 ? "false" : "true"}"
             allowfullscreen allow="autoplay; fullscreen" title="Live de ${esc(nome(u))}"></iframe>`;

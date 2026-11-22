@@ -126,7 +126,7 @@
   aspect-ratio: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .55));
 }
 .tela iframe { position: static; display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 0; background: #0c0820; }
-.cabeca-tela { position: absolute; top: -29px; left: 4px; right: 70px; height: 26px; display: flex; align-items: center; gap: 8px; z-index: 2; }
+.cabeca-tela { position: absolute; top: -29px; left: 4px; right: 110px; height: 26px; display: flex; align-items: center; gap: 8px; z-index: 2; }
 .selo-ms { height: 24px; width: auto; }
 .nome-tela { font: 600 14px "Fredoka", sans-serif; color: var(--texto); text-shadow: 0 1px 4px rgba(0, 0, 0, .7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tela .barra-tela { top: -29px; right: 0; opacity: 1; }
@@ -155,3 +155,26 @@
   background: var(--roxo); color: #fff; font: 600 12px "Fredoka", sans-serif; white-space: nowrap;
 }
 .chat-login a.sec { background: transparent; border: 1px solid rgba(240, 164, 58, .5); color: var(--ouro2); }
+
+/* sem cursor de texto piscando nos títulos/nomes */
+.pagina-multi { caret-color: transparent; }
+.pagina-multi h1, .pagina-multi .dica, .nome-tela, .cabeca-tela, .seletor, .multi-topo, .chip, .chat-abas, .chat-login span {
+  user-select: none; -webkit-user-select: none; cursor: default;
+}
+.chip, .chat-abas button, .img-btn, .barra-tela button, .chat-login a { cursor: pointer; }
+
+/* botões do topo da moldura (chat / tirar da tela) */
+.tela .barra-tela { top: -30px; right: 2px; gap: 6px; }
+.barra-tela button {
+  width: auto; height: 24px; padding: 0 10px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: linear-gradient(180deg, #5b2bb8, #2e1470);
+  border: 1.5px solid var(--ouro); color: var(--ouro2);
+  font: 600 11px "Fredoka", sans-serif; letter-spacing: .3px;
+  box-shadow: 0 0 8px rgba(145, 70, 255, .55), inset 0 1px 0 rgba(255, 255, 255, .18);
+  transition: transform .15s, box-shadow .15s, background .15s;
+}
+.barra-tela button i { font-size: 11px; }
+.barra-tela button:hover { transform: translateY(-1px); background: linear-gradient(180deg, #7a3fe0, #3d1a85); color: #fff; box-shadow: 0 0 12px rgba(240, 164, 58, .7); }
+.barra-tela button[data-acao="sair"] { padding: 0; width: 24px; justify-content: center; }
+.barra-tela button[data-acao="sair"]:hover { background: linear-gradient(180deg, #e0405a, #8c1022); }
