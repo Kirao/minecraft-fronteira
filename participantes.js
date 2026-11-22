@@ -29,7 +29,6 @@ window.PARTICIPANTES = [
   {
     nome: "Mamão",
     personagem: "Mamão",
-    capa: "personagens/mamao.webp",
     twitch: "mamao170",
     foto: "fotos/mamao.jpg",
     redes: {
@@ -41,7 +40,6 @@ window.PARTICIPANTES = [
   {
     nome: "oiRosa",
     personagem: "Rosa",
-    capa: "personagens/oirosa.webp",
     twitch: "oirosa",
     foto: "fotos/oirosa.jpg",
     redes: {
@@ -62,7 +60,6 @@ window.PARTICIPANTES = [
   {
     nome: "BrunimNeets",
     personagem: "Bruninho",
-    capa: "personagens/brunimneets.webp",
     twitch: "brunimneets",
     foto: "fotos/brunimneets.jpg",
     redes: {
@@ -83,7 +80,6 @@ window.PARTICIPANTES = [
   {
     nome: "Dansuri",
     personagem: "Dansuri",
-    capa: "personagens/dansuri.webp",
     twitch: "dansurioff",
     foto: "fotos/dansuri.jpg",
     redes: {
@@ -104,7 +100,6 @@ window.PARTICIPANTES = [
   {
     nome: "DletGamer",
     personagem: "Dletinho Valey",
-    capa: "personagens/dletgamer.webp",
     twitch: "dletgamer",
     foto: "fotos/dletgamer.jpg",
     redes: {
@@ -128,7 +123,6 @@ window.PARTICIPANTES = [
   {
     nome: "Elfo",
     personagem: "Meio-Elfo",
-    capa: "personagens/elfo.webp",
     twitch: "elfo",
     foto: "fotos/elfo.jpg",
     redes: {
@@ -141,7 +135,6 @@ window.PARTICIPANTES = [
   {
     nome: "EsponjaPerdida",
     personagem: "Esponja",
-    capa: "personagens/esponjaperdida.webp",
     twitch: "esponjaperdida",
     foto: "fotos/esponjaperdida.jpg",
     redes: {
@@ -161,7 +154,6 @@ window.PARTICIPANTES = [
   {
     nome: "ForeverPlayerG",
     personagem: "Forever",
-    capa: "personagens/forever.webp",
     twitch: "forever",
     foto: "fotos/forever.jpg",
     redes: {
@@ -172,7 +164,6 @@ window.PARTICIPANTES = [
   {
     nome: "GaloPunk",
     personagem: "Galopunk",
-    capa: "personagens/galopunk.webp",
     twitch: "galopunk",
     foto: "fotos/galopunk.jpg",
     redes: {
@@ -183,7 +174,6 @@ window.PARTICIPANTES = [
   {
     nome: "Glittertai",
     personagem: "Glittertai",
-    capa: "personagens/glittertai.webp",
     twitch: "glittertai",
     foto: "fotos/glittertai.jpg",
     redes: {
@@ -254,7 +244,6 @@ window.PARTICIPANTES = [
   {
     nome: "Sanziitos",
     personagem: "San",
-    capa: "personagens/sanziitos.webp",
     twitch: "sanziitos",
     foto: "fotos/sanziitos.jpg",
     redes: {
@@ -277,7 +266,6 @@ window.PARTICIPANTES = [
   {
     nome: "Starzinnn",
     personagem: "Starzin",
-    capa: "personagens/starzinnn.webp",
     twitch: "starzinnnkk",
     foto: "fotos/starzinnn.jpg",
     redes: {
@@ -289,7 +277,6 @@ window.PARTICIPANTES = [
   {
     nome: "Summer",
     personagem: "Summer",
-    capa: "personagens/summer.webp",
     twitch: "summeryyy__",
     foto: "fotos/summer.jpg",
     redes: {
@@ -299,7 +286,6 @@ window.PARTICIPANTES = [
   {
     nome: "Yayah",
     personagem: "Yayah",
-    capa: "personagens/yayah.webp",
     twitch: "yayahgatinha",
     foto: "fotos/yayah.jpg",
     redes: {

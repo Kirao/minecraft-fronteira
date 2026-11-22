@@ -98,7 +98,7 @@
       status = await r.json();
       carregou = true;
     } catch (e) {
-      try { status = await direto(users); } catch (e2) {}
+      try { status = await direto(users); carregou = true; } catch (e2) {}
     }
     render();
   }
