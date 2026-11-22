@@ -273,3 +273,25 @@ input, .campo input, .pagina-multi input { caret-color: var(--ouro2); }
 .filtro-live.atualizar.girando i { animation: girar .8s linear infinite; }
 .filtro-live:disabled { cursor: wait; opacity: .8; }
 @keyframes girar { to { transform: rotate(360deg); } }
+
+/* pop-up de atualizado */
+.toast {
+  position: fixed; left: 50%; top: 24px; z-index: 50;
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 22px 14px 16px; border-radius: 16px; min-width: 280px;
+  background: linear-gradient(180deg, #4b2196, #1d0f45);
+  border: 2px solid var(--ouro);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 24px rgba(145, 70, 255, .7), 0 12px 30px rgba(0,0,0,.6);
+  color: var(--texto); font-family: "Fredoka", sans-serif;
+  transform: translate(-50%, -30px) scale(.9); opacity: 0;
+  transition: transform .35s cubic-bezier(.2,1.4,.4,1), opacity .3s;
+}
+.toast.on { transform: translate(-50%, 0) scale(1); opacity: 1; }
+.toast::before, .toast::after {
+  content: ""; position: absolute; left: 50%; width: 12px; height: 12px; margin-left: -6px;
+  background: linear-gradient(135deg, #fff1c9, var(--ouro)); transform: rotate(45deg); box-shadow: 0 0 8px var(--ouro);
+}
+.toast::before { top: -7px; } .toast::after { bottom: -7px; }
+.toast i { font-size: 26px; color: var(--ouro2); filter: drop-shadow(0 0 6px rgba(240,164,58,.8)); }
+.toast b { display: block; font-size: 17px; font-weight: 700; color: var(--ouro2); }
+.toast span { display: block; font-size: 14px; color: var(--texto); margin-top: 2px; }

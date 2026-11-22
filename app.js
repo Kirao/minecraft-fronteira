@@ -119,6 +119,18 @@
   atualizar();
   setInterval(() => atualizar(), 60000);
 
+  // pop-up de aviso (some sozinho)
+  function toast(sub) {
+    document.querySelector(".toast")?.remove();
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.setAttribute("role", "status");
+    t.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><div><b>Informações atualizadas!</b><span>${sub}</span></div>`;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("on"));
+    setTimeout(() => { t.classList.remove("on"); setTimeout(() => t.remove(), 400); }, 3500);
+  }
+
   // botão "Atualizar": faz uma checagem nova agora, sem cache
   const btnAtt = document.getElementById("atualizar");
   btnAtt?.addEventListener("click", async () => {
@@ -127,6 +139,8 @@
     btnAtt.classList.add("girando");
     await atualizar(true);
     btnAtt.classList.remove("girando");
+    const n = lista.filter(aoVivo).length;
+    toast(n ? `${n} ${n === 1 ? "criador está" : "criadores estão"} ao vivo agora` : "Ninguém da série está ao vivo agora");
     setTimeout(() => (btnAtt.disabled = false), 5000); // evita cliques seguidos
   });
 })();
