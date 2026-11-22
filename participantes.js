@@ -307,4 +307,12 @@ window.PARTICIPANTES = [
       youtube: "https://www.youtube.com/@swagger2y",
     },
   },
+  {
+    nome: "Willian",
+    personagem: "Willian",
+    capa: "personagens/willian.webp",
+    twitch: "",
+    redes: {
+    },
+  },
 ];

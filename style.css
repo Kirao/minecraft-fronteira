@@ -193,22 +193,24 @@ a.pilula:hover { transform: translateY(-2px); filter: drop-shadow(0 0 10px rgba(
   border-radius: 50%; object-fit: cover;
 }
 
-/* balão do mapa do Forever (balão do kit) */
-.mapa { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
+/* balão do mapa do Forever: pequeno, saindo do lado da pílula, abre ao passar o mouse */
+.mapa { position: relative; display: inline-block; }
 .balao {
-  position: relative; width: 250px; aspect-ratio: 428 / 245; margin: 0 0 4px 40px;
+  position: absolute; left: calc(100% - 18px); bottom: 62%; z-index: 5;
+  width: 190px; aspect-ratio: 428 / 245;
   background: url("ui/balao.webp") center / 100% 100% no-repeat;
   display: flex; align-items: center; justify-content: center;
-  padding: 8% 10% 22% 10%;
-  animation: flutuar 3s ease-in-out infinite;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .45));
+  padding: 9% 11% 24% 12%;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .5));
+  opacity: 0; pointer-events: none;
+  transform: translate(-6px, 8px) scale(.85); transform-origin: 8% 92%;
+  transition: opacity .18s, transform .18s;
 }
-.balao span { color: var(--texto); font: 600 13px/1.3 "Fredoka", sans-serif; text-align: center; }
-@keyframes flutuar { 50% { transform: translateY(-4px); } }
-
-@media (max-width: 600px) {
+.balao span { color: var(--texto); font: 600 11.5px/1.25 "Fredoka", sans-serif; text-align: center; }
+.mapa:hover .balao, .mapa:focus-within .balao, .mapa.aberto .balao { opacity: 1; transform: none; }
+@media (max-width: 760px) {
   .pilula .fundo-pilula { height: 44px; }
-  .balao { margin-left: 0; width: 230px; }
+  .balao { left: auto; right: 0; bottom: 100%; transform-origin: 20% 100%; }
 }
 
 /* botão para o multistream */
