@@ -171,7 +171,7 @@ main { max-width: 1320px; margin: 0 auto; padding: 0 16px 40px; }
 .vazio { width: 100%; text-align: center; color: var(--texto2); padding: 30px 16px; }
 
 /* ---------- rodapé ---------- */
-.rodape { text-align: center; color: var(--texto2); font-size: 13px; padding: 0 16px 28px; }
+.rodape { text-align: center; color: var(--texto2); font-size: 13px; padding: 0 16px 72px; }
 .rodape .barra { width: min(520px, 90vw); height: auto; display: block; margin: 0 auto 6px; opacity: .9; }
 .rodape p { margin: 0; }
 
@@ -295,3 +295,53 @@ input, .campo input, .pagina-multi input { caret-color: var(--ouro2); }
 .toast i { font-size: 26px; color: var(--ouro2); filter: drop-shadow(0 0 6px rgba(240,164,58,.8)); }
 .toast b { display: block; font-size: 17px; font-weight: 700; color: var(--ouro2); }
 .toast span { display: block; font-size: 14px; color: var(--texto); margin-top: 2px; }
+
+/* ---------- contador "no site agora" (canto inferior esquerdo) ---------- */
+.online-agora {
+  position: fixed; left: 16px; bottom: 16px; z-index: 40;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px 8px 12px; border-radius: 999px;
+  background: linear-gradient(180deg, #4b2196, #1d0f45);
+  border: 2px solid var(--ouro);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 16px rgba(145, 70, 255, .55), 0 8px 20px rgba(0,0,0,.5);
+  color: var(--texto); font-family: "Fredoka", sans-serif; font-size: 14px;
+  opacity: 0; transform: translateY(12px); transition: opacity .3s, transform .3s;
+  pointer-events: none; user-select: none;
+}
+.online-agora.on { opacity: 1; transform: none; pointer-events: auto; }
+.online-agora i { color: var(--ouro2, #ffd35a); }
+.online-agora b { font-size: 17px; font-weight: 700; color: var(--ouro2, #ffd35a); min-width: 1ch; text-align: center; }
+.online-agora .pulso {
+  width: 9px; height: 9px; border-radius: 50%; background: #3ee07a;
+  box-shadow: 0 0 0 0 rgba(62, 224, 122, .7); animation: pulso-online 2s infinite;
+}
+.online-agora.pula b { animation: pula-num .5s; }
+@keyframes pulso-online { 0% { box-shadow: 0 0 0 0 rgba(62,224,122,.7); } 70% { box-shadow: 0 0 0 9px rgba(62,224,122,0); } 100% { box-shadow: 0 0 0 0 rgba(62,224,122,0); } }
+@keyframes pula-num { 40% { transform: scale(1.35); } }
+
+/* ---------- botão "Instalar app" (canto inferior direito) ---------- */
+.instalar-app {
+  position: fixed; right: 16px; bottom: 16px; z-index: 40;
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  padding: 9px 16px; border-radius: 999px;
+  background: linear-gradient(180deg, #ffd35a, #f08a1c);
+  border: 2px solid #fff1c9; color: #2a1206;
+  font-family: "Fredoka", sans-serif; font-size: 15px; font-weight: 700;
+  box-shadow: 0 0 16px rgba(240, 164, 58, .6), 0 8px 20px rgba(0,0,0,.5);
+  transition: transform .15s;
+}
+.instalar-app:hover { transform: translateY(-2px); }
+.instalar-app[hidden] { display: none; }
+.toast .inline { display: inline; font-size: inherit; }
+
+@media (max-width: 600px) {
+  .online-agora { left: 10px; bottom: 10px; font-size: 12px; padding: 6px 11px 6px 10px; }
+  .online-agora b { font-size: 15px; }
+  .instalar-app { right: 10px; bottom: 10px; font-size: 13px; padding: 7px 12px; }
+}
+@media (display-mode: standalone) { body { padding-bottom: env(safe-area-inset-bottom); } }
+/* no multistream fica discreto pra não tapar o player */
+.pagina-multi .online-agora .rotulo { display: none; }
+.pagina-multi .online-agora.on { opacity: .75; }
+.pagina-multi .online-agora.on:hover { opacity: 1; }
+.pagina-multi .instalar-app { display: none; }
