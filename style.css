@@ -210,3 +210,16 @@ a.pilula:hover { transform: translateY(-2px); filter: drop-shadow(0 0 10px rgba(
   .pilula .fundo-pilula { height: 44px; }
   .balao { margin-left: 0; width: 230px; }
 }
+
+/* botão para o multistream */
+.ir-multi { text-align: center; margin: 10px 0 0; }
+.ir-multi a {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px; border-radius: 999px; text-decoration: none;
+  background: linear-gradient(180deg, #6d2fd6, #3d1a85); color: #fff;
+  border: 1.5px solid var(--roxo-brilho); font: 600 15px "Fredoka", sans-serif;
+  box-shadow: 0 0 14px rgba(145, 70, 255, .6), 0 4px 12px rgba(0, 0, 0, .4);
+  transition: transform .15s;
+}
+.ir-multi a:hover { transform: translateY(-2px); }
+.ir-multi i { color: var(--ouro2); }

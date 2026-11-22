@@ -36,7 +36,7 @@
          <img class="foto avatar" src="${esc(avatar)}" alt="Foto de ${esc(p.nome)}" onerror="this.src='${AVATAR_PADRAO}'" />`;
 
     const selo = live
-      ? `<a class="selo-live" href="https://twitch.tv/${u}" target="_blank" rel="noopener"><img src="ui/aovivo.webp" alt="Ao vivo" width="345" height="95" /></a>`
+      ? `<a class="selo-live" href="multistream.html?c=${u}" title="Assistir aqui no site"><img src="ui/aovivo.webp" alt="Ao vivo" width="345" height="95" /></a>`
       : "";
 
     // "youtube2", "twitch2"... usam o mesmo ícone da rede

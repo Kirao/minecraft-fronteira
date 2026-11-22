@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minecraft Fronteira | Multistream</title>
+  <meta name="description" content="Assista várias lives da série Minecraft Fronteira ao mesmo tempo." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#1a0f3d" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=11" />
+  <link rel="stylesheet" href="multistream.css?v=11" />
+</head>
+<body class="pagina-multi">
+  <div class="fundo" aria-hidden="true"></div>
+
+  <header class="multi-topo">
+    <a class="voltar" href="./"><i class="fa-solid fa-arrow-left"></i> Criadores</a>
+    <a href="./" class="multi-logo"><img src="logo.webp" alt="Minecraft Fronteira" width="700" height="178" /></a>
+    <div class="multi-acoes">
+      <button id="btn-chat" class="acao" title="Mostrar/esconder chat"><i class="fa-solid fa-comments"></i> Chat</button>
+      <button id="btn-link" class="acao" title="Copiar link desta seleção"><i class="fa-solid fa-link"></i> Copiar link</button>
+    </div>
+  </header>
+
+  <section class="seletor">
+    <div class="seletor-titulo">
+      <img src="ui/divisor2.webp" alt="" aria-hidden="true" class="div-esq" />
+      <h1>Multistream</h1>
+      <img src="ui/divisor2.webp" alt="" aria-hidden="true" />
+    </div>
+    <p class="dica" id="dica">Carregando quem está ao vivo...</p>
+    <div class="lista-live" id="lista-live"></div>
+  </section>
+
+  <main class="palco" id="palco">
+    <div class="telas" id="telas"></div>
+    <aside class="chat" id="chat" hidden>
+      <div class="chat-abas" id="chat-abas"></div>
+      <iframe id="chat-frame" title="Chat da Twitch"></iframe>
+    </aside>
+  </main>
+
+  <script src="participantes.js?v=11"></script>
+  <script src="multistream.js?v=11"></script>
+</body>
+</html>
