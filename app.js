@@ -73,6 +73,7 @@
       </article>`;
   }
 
+  let ultimoHtml = null;
   function render() {
     const termo = (busca?.value || "").trim().toLowerCase();
     const ordenada = [...lista]
@@ -80,9 +81,11 @@
       .filter((p) => !soLive || aoVivo(p))
       .sort((a, b) => (a.personagem || a.nome).localeCompare(b.personagem || b.nome, "pt-BR", { sensitivity: "base" }));
 
-    grade.innerHTML = ordenada.length
+    const html = ordenada.length
       ? ordenada.map(card).join("")
       : `<p class="vazio">${soLive ? (carregou ? "Ninguém da série está ao vivo agora." : "Verificando quem está ao vivo...") : termo ? "Nenhum criador encontrado." : "Nenhum criador cadastrado ainda."}</p>`;
+    // só redesenha a grade se algo mudou (recriar os 26 cards a cada minuto dava uma travadinha)
+    if (html !== ultimoHtml) { grade.innerHTML = html; ultimoHtml = html; }
 
     const vivos = lista.filter(aoVivo).length;
     contagem.innerHTML = carregou

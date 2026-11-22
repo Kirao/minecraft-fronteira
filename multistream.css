@@ -123,7 +123,9 @@
   border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible;
   border-style: solid; border-width: 32px 12px 17px; border-color: transparent;
   border-image: url("ui/ms_player.webp") 59 22 32 22 / 32px 12px 17px / 0 stretch;
-  aspect-ratio: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .55));
+  aspect-ratio: auto; filter: none;
+  /* box-shadow em vez de filter: com filter o navegador reprocessava o vídeo da live a cada quadro */
+  border-radius: 10px; box-shadow: 0 10px 20px rgba(0, 0, 0, .55);
 }
 .tela iframe { position: static; display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 0; background: #0c0820; }
 .cabeca-tela { position: absolute; top: -29px; left: 4px; right: 110px; height: 26px; display: flex; align-items: center; gap: 8px; z-index: 2; }
@@ -137,7 +139,7 @@
   border-style: solid; border-width: 26px 11px 20px; border-color: transparent;
   border-image: url("ui/ms_chat.webp") 46 22 38 22 / 26px 11px 20px / 0 stretch;
   background: #0e0a24; background-clip: padding-box;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .55));
+  border-radius: 10px; box-shadow: 0 10px 20px rgba(0, 0, 0, .55);
 }
 .chat-abas { background: #160f33; border-bottom: 1px solid rgba(240, 164, 58, .35); }
 .chat iframe { border-radius: 4px; }
