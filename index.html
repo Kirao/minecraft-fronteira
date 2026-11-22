@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minecraft Fronteira | Participantes</title>
+  <meta name="description" content="Todos os participantes da série Minecraft Fronteira, quem está ao vivo agora e as redes de cada um." />
+  <link rel="icon" href="logo.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    // aplica o tema salvo antes de desenhar a página (evita "piscar")
+    try {
+      const t = localStorage.getItem("tema");
+      if (t) document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <header class="topo">
+    <button id="tema" class="tema" aria-label="Alternar modo claro/escuro" title="Modo claro/escuro">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+
+    <div class="logo">
+      <img src="logo.webp" alt="Minecraft Fronteira" onerror="this.remove(); document.querySelector('.logo-texto').hidden = false;" />
+      <div class="logo-texto" hidden>
+        <span class="l1">MINECRAFT</span>
+        <span class="l2">FRONTEIRA</span>
+      </div>
+    </div>
+
+    <p class="sub">Participantes da série</p>
+    <div class="contagem" id="contagem"></div>
+  </header>
+
+  <main>
+    <div class="filtros">
+      <button class="filtro ativo" data-filtro="todos">Todos</button>
+      <button class="filtro" data-filtro="live"><span class="ponto"></span> Ao vivo</button>
+    </div>
+    <section id="grade" class="grade" aria-live="polite"></section>
+  </main>
+
+  <footer class="rodape">Status ao vivo atualiza sozinho a cada minuto.</footer>
+
+  <script src="participantes.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
