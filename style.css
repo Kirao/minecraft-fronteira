@@ -108,10 +108,12 @@ main { max-width: 1320px; margin: 0 auto; padding: 0 16px 40px; }
 .card.live { filter: drop-shadow(0 0 10px rgba(229, 36, 59, 0.85)) drop-shadow(0 0 22px rgba(229, 36, 59, 0.45)); }
 
 .selo-live {
-  position: absolute; top: -20px; left: -12px; z-index: 3; line-height: 0;
-  filter: drop-shadow(0 0 8px rgba(229, 36, 59, .85)) drop-shadow(0 3px 6px rgba(0, 0, 0, .5));
+  position: absolute; top: -24px; left: -14px; z-index: 3; line-height: 0;
+  filter: drop-shadow(0 0 8px rgba(170, 90, 255, .85)) drop-shadow(0 3px 6px rgba(0, 0, 0, .5));
+  animation: brilho 2s ease-in-out infinite;
 }
-.selo-live img { width: 112px; height: auto; display: block; }
+.selo-live img { width: 128px; height: auto; display: block; }
+@keyframes brilho { 50% { filter: drop-shadow(0 0 14px rgba(190, 120, 255, 1)) drop-shadow(0 3px 6px rgba(0, 0, 0, .5)); } }
 .selo-live i { font-size: 12px; animation: pulsar 1.2s infinite; }
 @keyframes pulsar { 50% { opacity: .35; } }
 
