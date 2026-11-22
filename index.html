@@ -13,36 +13,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="style.css?v=3" />
-  <script>
-    try {
-      const t = localStorage.getItem("tema");
-      if (t) document.documentElement.dataset.theme = t;
-    } catch (e) {}
-  </script>
+  <link rel="stylesheet" href="style.css?v=4" />
 </head>
 <body>
   <div class="fundo" aria-hidden="true"></div>
-
-  <button id="tema" class="tema" aria-label="Alternar modo claro/escuro" title="Modo claro/escuro">
-    <i class="fa-solid fa-sun"></i>
-  </button>
 
   <header class="topo">
     <h1 class="logo">
       <img src="logo.webp" alt="Minecraft Fronteira" width="700" height="178" />
     </h1>
-
-    <nav class="abas" aria-label="Grupos">
-      <span class="linha esq" aria-hidden="true"></span>
-      <button class="aba roxo ativa" data-grupo="personagens">
-        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 4l10 10M4 4h3l9 9M4 4v3l9 9M14 14l-2 2m2-2l2-2M13 16l2 3m3-3l-3-2M20 4l-10 10M20 4h-3l-5 5M20 4v3l-5 5M10 14l2 2m-2-2l-2-2M11 16l-2 3m-3-3l3-2"/></svg>
-        Personagens
-      </button>
-      <button class="aba laranja" data-grupo="elementais"><i class="fa-solid fa-fire ico"></i> Elementais</button>
-      <button class="aba ciano" data-grupo="exploradores"><i class="fa-regular fa-compass ico"></i> Exploradores</button>
-      <span class="linha dir" aria-hidden="true"></span>
-    </nav>
   </header>
 
   <main>
@@ -57,7 +36,7 @@
 
   <footer class="rodape">Status ao vivo da Twitch atualiza sozinho a cada minuto.</footer>
 
-  <script src="participantes.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="participantes.js?v=4"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>

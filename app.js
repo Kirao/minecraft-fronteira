@@ -3,7 +3,6 @@
   const grade = document.getElementById("grade");
   const contagem = document.getElementById("contagem");
   let status = {}; // { usuario: { avatar, live } }
-  let grupo = "personagens";
 
   const ICONES = {
     twitch: "fa-brands fa-twitch",
@@ -46,19 +45,18 @@
 
     return `
       <article class="card ${live ? "live" : ""}">
-        <div class="capa">${selo}${capa}</div>
+        <div class="moldura"><div class="capa">${selo}${capa}</div><i class="canto tl"></i><i class="canto tr"></i><i class="canto bl"></i><i class="canto br"></i></div>
         <h3 class="nome">${esc(p.nome)}</h3>
         <div class="redes">${redes}</div>
       </article>`;
   }
 
   function render() {
-    const doGrupo = lista.filter((p) => (p.grupo || "personagens") === grupo);
-    const ordenada = [...doGrupo].sort((a, b) => aoVivo(b) - aoVivo(a));
+    const ordenada = [...lista].sort((a, b) => aoVivo(b) - aoVivo(a));
 
     grade.innerHTML = ordenada.length
       ? ordenada.map(card).join("")
-      : `<p class="vazio">Nenhum criador neste grupo ainda.</p>`;
+      : `<p class="vazio">Nenhum criador cadastrado ainda.</p>`;
 
     const vivos = lista.filter(aoVivo).length;
     contagem.innerHTML = `${lista.length} criadores · <b>${vivos} ao vivo agora</b>`;
@@ -91,28 +89,6 @@
     }
     render();
   }
-
-  // abas
-  document.querySelectorAll(".aba").forEach((b) =>
-    b.addEventListener("click", () => {
-      document.querySelectorAll(".aba").forEach((x) => x.classList.remove("ativa"));
-      b.classList.add("ativa");
-      grupo = b.dataset.grupo;
-      render();
-    })
-  );
-
-  // modo claro / escuro (padrão: escuro)
-  const btnTema = document.getElementById("tema");
-  const temaAtual = () => document.documentElement.dataset.theme || "dark";
-  const iconeTema = () => (btnTema.innerHTML = `<i class="fa-solid ${temaAtual() === "dark" ? "fa-sun" : "fa-moon"}"></i>`);
-  btnTema.addEventListener("click", () => {
-    const novo = temaAtual() === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = novo;
-    try { localStorage.setItem("tema", novo); } catch (e) {}
-    iconeTema();
-  });
-  iconeTema();
 
   render();
   atualizar();
