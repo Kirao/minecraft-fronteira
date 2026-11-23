@@ -37,6 +37,19 @@ body {
   }
 }
 
+/* ---------- aviso: site de fãs ---------- */
+.aviso-fa {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 8px 16px;
+  background: rgba(10, 6, 30, 0.82);
+  border-bottom: 1px solid rgba(240, 164, 58, 0.35);
+  color: var(--texto2);
+  font-size: 13px; line-height: 1.4; text-align: center;
+}
+.aviso-fa b { color: var(--ouro2); font-weight: 600; }
+.aviso-fa i { color: var(--ouro); font-size: 12px; flex: none; }
+@media (max-width: 700px) { .aviso-fa { font-size: 12px; padding: 7px 12px; } }
+
 /* ---------- cabeçalho (banner do kit) ---------- */
 .topo { padding: 18px 12px 0; }
 .banner {
